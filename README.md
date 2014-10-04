@@ -46,3 +46,7 @@ The adiministrator's interface will have pages to create, update, read and delet
 Optional there will be a referee system. The referee system will allow authenticated referees to create and update game data. Referees will be able to login and will be directed to a list of games they have been assigned to. Referees can select games from the list and insert information.
 
 Optional there will be a season generator. A new Season will be created by selecting a year and all teams for the season. The system then generates all the matches for the season. The job of the adminstrator would then be to select dates for each matchday.
+
+### Database model
+![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/miso.svg)
+
