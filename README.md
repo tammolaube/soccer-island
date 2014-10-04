@@ -2,10 +2,6 @@
 
 This system is made for the Mayor Island Soccer Organization (MISO). It will be used by fans, players, coaches, referees, and administrators of MISO.
 
-### Architecture Choice
-
-This system will be a web application and be accessible over the Internet. We will be using Django a python based web application framework. Our database will be MySQL. For styling the UI we will use the twitter bootstrap framework and jQuery.
-
 ### User Interfaces
 
 We will divide the system in two parts. Part A) will be open to everyone. Part B) will only be open to referees and administrators. Administrators will have access to more features than referees.  
@@ -50,3 +46,5 @@ Optional there will be a season generator. A new Season will be created by selec
 ### Database model
 ![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/master/docs/miso.png)
 
+### Architecture Choice
+This system will be a web application and be accessible over the Internet. We will be using Django a python based web application framework. Our database will be MySQL. For styling the UI we will use the twitter bootstrap framework and jQuery.
