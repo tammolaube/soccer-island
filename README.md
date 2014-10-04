@@ -15,17 +15,18 @@ Additionally administrators can create and update other users of part B), namely
 
 #### Part A) 
 There are two major competition categories divisons (with playoffs) and tournaments.  
+
 Each division will have an overview page. Displayed on the overview are last games, upcoming games, standings, top goal scorers, top assists givers, top carded players (yellow/red).  
-![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/division-overview.png)
+![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/division-overview.png)  
 Each team playing in a division will have a team page that shows the team's roster. Additional information such as goals scored, number/minutes of games played,... can be displayed for each player.  
-![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/team-roster.png)
+![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/team-roster.png)  
 Each division will have a schedule page that shows all upcoming games including dates for playoffs.  
-![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/schedule.png)
+![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/schedule.png)  
 Each division will have a playoffs page similar to the overview page. The schedule will be displayed here as well.  
-![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/playoffs.png)
+![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/playoffs.png)  
 
 Each tournament will have a overview page similar to the divisions overview page.  
-![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/cup.png)
+![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/cup.png)  
 
 For each competition there will be a player's stats page displaying goals, assists and cards.
 ![overview](https://raw.githubusercontent.com/tammolaube/soccer-island/5675b7008a5b2e5f83f4fef41d8e1701b908e35b/docs/players-stats.png)
