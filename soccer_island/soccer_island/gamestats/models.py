@@ -80,6 +80,7 @@ class Team(models.Model):
             ),
         )
     classification = models.CharField(max_length=5, choices=CLASSIFICATION_CHOICES)
+    club = models.ForeignKey(Club, blank=True, null=True)
 
 class Club(models.Model):
     name = models.CharField(max_length=50)
