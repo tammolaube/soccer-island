@@ -1,6 +1,6 @@
 #SOCCER ISLAND - PROPOSAL IS6050 PROJECT GROUP BY
 
-This system is made for the Mayor Island Soccer Organization (MISO). It will be used by fans, players, coaches, referees, and administrators of MISO.
+This system is made for the Mayor Island Soccer Organization (MISO). It will be used by administrators, players, coaches, referees, and fans of MISO.
 
 ### User Interfaces
 
