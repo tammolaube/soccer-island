@@ -106,3 +106,10 @@ CREATE INDEX stats_card_def6ee40 ON `stats_card` (`received_in_id`);
 ALTER TABLE `stats_card` ADD CONSTRAINT stats_card_received_in_id_7ca52a4b070c1770_fk_stats_game_id FOREIGN KEY (`received_in_id`) REFERENCES `stats_game` (`id`);
 
 COMMIT;
+BEGIN;
+ALTER TABLE `stats_competition` DROP FOREIGN KEY stats_compet_belongs_id_734f027aa093d957_fk_stats_competition_id;
+ALTER TABLE `stats_competition` MODIFY `belongs_id` integer NULL;
+ALTER TABLE `stats_competition` ADD CONSTRAINT stats_compet_belongs_id_734f027aa093d957_fk_stats_competition_id FOREIGN KEY (`belongs_id`) REFERENCES `stats_competition` (`id`);
+ALTER TABLE `stats_competition` ALTER COLUMN `belongs_id` DROP DEFAULT;
+
+COMMIT;

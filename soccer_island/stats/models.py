@@ -103,7 +103,7 @@ class Competition(models.Model):
         )
     short_name = models.CharField(max_length=5)
     competition_type = models.CharField(max_length=1, choices=TYPE_CHOICES)
-    belongs = models.ForeignKey("self")
+    belongs = models.ForeignKey("self", blank=True, null=True)
 
 class Season(models.Model):
     name = models.CharField(max_length=50)
