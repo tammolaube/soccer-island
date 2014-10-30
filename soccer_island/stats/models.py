@@ -62,7 +62,7 @@ class Team(models.Model):
 
 class Player(models.Model):
     person = models.ForeignKey(Person)
-    registered = models.ManyToManyField(Team, through='PlaysFor', through_fields=('player', 'team'))
+    registered = models.ManyToManyField(Team, through='PlayFor', through_fields=('player', 'team'))
 
 class PlayFor(models.Model):
     player = models.ForeignKey(Player)
@@ -71,7 +71,8 @@ class PlayFor(models.Model):
     to_date = models.DateField(blank=True, null=True)
 
 class Coach(models.Model):
-   person = models.ForeignKey(Person)
+    person = models.ForeignKey(Person)
+    registered = models.ManyToManyField(Team, through='CoachFor', through_fields=('coach', 'team'))
 
 class CoachFor(models.Model):
     coach = models.ForeignKey(Coach)
@@ -89,7 +90,7 @@ class Referee(models.Model):
     person = models.ForeignKey(Person)
 
 class Field(models.Model):
-    name = models.ForeignKey(Team)
+    name = models.CharField(max_length=50)
     address = models.ForeignKey(Address)
 
 class Competition(models.Model):
@@ -113,18 +114,18 @@ class Season(models.Model):
 
 class Game(models.Model):
     date = models.DateField()
-    away_team = models.ForeignKey(Team)
-    home_team = models.ForeignKey(Team)
+    away_team = models.ForeignKey(Team, related_name='game_away_team')
+    home_team = models.ForeignKey(Team, related_name='game_home_team')
     referee = models.ForeignKey(Referee)
     field = models.ForeignKey(Field)
     season = models.ForeignKey(Season)
 
 class Goal(models.Model):
     minute = models.SmallIntegerField()
-    scored_by = models.ForeignKey(Player)
-    assisted_by = models.ForeignKey(Player, null=True, blank=True)
-    scored_for = models.ForeignKey(Team)
-    scored_against = models.ForeignKey(Team)
+    scored_by = models.ForeignKey(Player, related_name='goal_scored_by')
+    assisted_by = models.ForeignKey(Player, related_name='goal_assisted_by', null=True, blank=True)
+    scored_for = models.ForeignKey(Team, related_name='goal_scored_for')
+    scored_against = models.ForeignKey(Team, related_name='goal_scored_against')
     scored_in = models.ForeignKey(Game)
 
 class Card(models.Model):
