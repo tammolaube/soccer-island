@@ -77,8 +77,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=50)),
                 ('short_name', models.CharField(max_length=5)),
-                ('competition_type', models.CharField(max_length=1, choices=[(b'L', b'League'), (b'C', b'Cup'), (b'P', b'Playoffs'), (b'R', b'Relegation')])),
-                ('belongs', models.ForeignKey(to='stats.Competition')),
+                ('mode', models.CharField(max_length=1, choices=[(b'L', b'League'), (b'C', b'Cup'), (b'P', b'Playoffs'), (b'R', b'Relegation')])),
+                ('classification', models.CharField(default=b'mopen', max_length=5, choices=[(b'Men', ((b'mopen', b"Men's Open"), (b'mo35', b"Men's 35+"), (b'mo45', b"Men's Masters"))), (b'Women', ((b'women', b"Women's Open"),)), (b'Boys', ((b'bu19', b'Boys U19'), (b'bu16', b'Boys U16'), (b'bu14', b'Boys U14'), (b'bu12', b'Boys U12'))), (b'Girls', ((b'gu19', b'Girls U19'), (b'gu16', b'Girls U16'), (b'gu14', b'Girls U14'), (b'gu12', b'Girls U12')))])),
             ],
             options={
             },
@@ -100,6 +100,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('date', models.DateField()),
+                ('name', models.CharField(max_length=50)),
             ],
             options={
             },
@@ -110,6 +111,18 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('minute', models.SmallIntegerField()),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Matchday',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50)),
+                ('short_name', models.CharField(max_length=5)),
+                ('next_matchday', models.ForeignKey(blank=True, to='stats.Matchday', null=True)),
             ],
             options={
             },
@@ -230,6 +243,12 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
+            model_name='matchday',
+            name='season',
+            field=models.ForeignKey(to='stats.Season'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
             model_name='goal',
             name='assisted_by',
             field=models.ForeignKey(related_name=b'goal_assisted_by', blank=True, to='stats.Player', null=True),
@@ -279,14 +298,20 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='game',
-            name='referee',
-            field=models.ForeignKey(to='stats.Referee'),
+            name='matchday',
+            field=models.ForeignKey(to='stats.Matchday'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='game',
-            name='season',
-            field=models.ForeignKey(to='stats.Season'),
+            name='next_game',
+            field=models.ForeignKey(blank=True, to='stats.Game', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='game',
+            name='referee',
+            field=models.ForeignKey(to='stats.Referee'),
             preserve_default=True,
         ),
         migrations.AddField(

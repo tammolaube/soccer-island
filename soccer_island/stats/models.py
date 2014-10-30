@@ -1,5 +1,32 @@
 from django.db import models
 
+CLASSIFICATION_CHOICES = (
+    ('Men', (
+            ('mopen', 'Men\'s Open'),
+            ('mo35', 'Men\'s 35+'),
+            ('mo45', 'Men\'s Masters'),
+        ),
+    ),
+    ('Women', (
+            ('women', 'Women\'s Open'),
+        ),
+    ),
+    ('Boys', (
+            ('bu19', 'Boys U19'),
+            ('bu16', 'Boys U16'),
+            ('bu14', 'Boys U14'),
+            ('bu12', 'Boys U12'),
+        ),
+    ),
+    ('Girls', (
+            ('gu19', 'Girls U19'),
+            ('gu16', 'Girls U16'),
+            ('gu14', 'Girls U14'),
+            ('gu12', 'Girls U12'),
+        ),
+    ),
+)
+
 class Address(models.Model):
     street = models.CharField(max_length=100)
     city = models.CharField(max_length=50, default='Honolulu')
@@ -31,32 +58,6 @@ class Team(models.Model):
     short_name = models.CharField(max_length=3)
     color_first = models.CharField(max_length=20)
     color_second = models.CharField(max_length=20)
-    CLASSIFICATION_CHOICES = (
-            ('Men', (
-                    ('mopen', 'Men\'s Open'),
-                    ('mo35', 'Men\'s 35+'),
-                    ('mo45', 'Men\'s Masters'),
-                ),
-            ),
-            ('Women', (
-                    ('women', 'Women\'s Open'),
-                ),
-            ),
-            ('Boys', (
-                    ('bu19', 'Boys U19'),
-                    ('bu16', 'Boys U16'),
-                    ('bu14', 'Boys U14'),
-                    ('bu12', 'Boys U12'),
-                ),
-            ),
-            ('Girls', (
-                    ('gu19', 'Girls U19'),
-                    ('gu16', 'Girls U16'),
-                    ('gu14', 'Girls U14'),
-                    ('gu12', 'Girls U12'),
-                ),
-            ),
-        )
     classification = models.CharField(max_length=5, choices=CLASSIFICATION_CHOICES)
     club = models.ForeignKey(Club, blank=True, null=True)
 
@@ -102,8 +103,8 @@ class Competition(models.Model):
             ('R', 'Relegation'),
         )
     short_name = models.CharField(max_length=5)
-    competition_type = models.CharField(max_length=1, choices=TYPE_CHOICES)
-    belongs = models.ForeignKey("self", blank=True, null=True)
+    mode = models.CharField(max_length=1, choices=TYPE_CHOICES)
+    classification = models.CharField(max_length=5, choices=CLASSIFICATION_CHOICES, default='mopen')
 
 class Season(models.Model):
     name = models.CharField(max_length=50)
@@ -112,13 +113,22 @@ class Season(models.Model):
     of = models.ForeignKey(Competition)
     enrolled = models.ManyToManyField(Team)
 
+class Matchday(models.Model):
+    name = models.CharField(max_length=50)
+    short_name = models.CharField(max_length=5)
+    season = models.ForeignKey(Season)
+    next_matchday = models.ForeignKey("self", blank=True, null=True)
+
 class Game(models.Model):
     date = models.DateField()
     away_team = models.ForeignKey(Team, related_name='game_away_team')
     home_team = models.ForeignKey(Team, related_name='game_home_team')
     referee = models.ForeignKey(Referee)
     field = models.ForeignKey(Field)
-    season = models.ForeignKey(Season)
+    matchday = models.ForeignKey(Matchday)
+    # for tournaments so you can create a tree, and names (e.g. Semifinal A):
+    next_game = models.ForeignKey("self", blank=True, null=True)
+    name = models.CharField(max_length=50)
 
 class Goal(models.Model):
     minute = models.SmallIntegerField()
