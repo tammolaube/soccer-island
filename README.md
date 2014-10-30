@@ -50,4 +50,4 @@ Optional there will be a season generator. A new Season will be created by selec
 This system will be a web application and be accessible over the Internet. We will be using Django a python based web application framework. Our database will be MySQL. For styling the UI we will use the twitter bootstrap framework and jQuery.
 
 ### SQL Migration Statements
-![sql migrations](docs/create_database.sql)
+To see the generated SQL Statements click on this link: ![Sql Migrations](docs/create_database.sql).
