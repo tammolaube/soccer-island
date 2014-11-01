@@ -1,4 +1,4 @@
-#SOCCER ISLAND - PROPOSAL IS6050 PROJECT GROUP BY
+#SOCCER ISLAND - IS6050 PROJECT GROUP BY
 
 This system is made for the Mayor Island Soccer Organization (MISO). It will be used by fans, players, coaches, referees, and administrators of MISO.
 
@@ -49,5 +49,8 @@ Optional there will be a season generator. A new Season will be created by selec
 ### Architecture Choice
 This system will be a web application and be accessible over the Internet. We will be using Django a python based web application framework. Our database will be MySQL. For styling the UI we will use the twitter bootstrap framework and jQuery.
 
-### SQL Migration Statements
+### Physical Database Model
+![Physical Database Model](docs/eer_diagram.png)
+
+#### SQL Migration Statements
 To see the generated SQL Statements click on this link: [Sql Migrations](docs/create_database.sql).
