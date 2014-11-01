@@ -15,6 +15,7 @@ from stats.models import Game
 from stats.models import Goal
 from stats.models import Card
 from stats.models import Suspension
+from stats.models import Matchday
 
 # Register your models here.
 admin.site.register(Address)
@@ -33,3 +34,4 @@ admin.site.register(Game)
 admin.site.register(Goal)
 admin.site.register(Card)
 admin.site.register(Suspension)
+admin.site.register(Matchday)

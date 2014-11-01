@@ -115,3 +115,13 @@ CREATE INDEX stats_card_def6ee40 ON `stats_card` (`received_in_id`);
 ALTER TABLE `stats_card` ADD CONSTRAINT stats_card_received_in_id_7ca52a4b070c1770_fk_stats_game_id FOREIGN KEY (`received_in_id`) REFERENCES `stats_game` (`id`);
 
 COMMIT;
+BEGIN;
+ALTER TABLE `stats_game` MODIFY `name` varchar(50) NULL;
+ALTER TABLE `stats_game` ALTER COLUMN `name` DROP DEFAULT;
+
+COMMIT;
+BEGIN;
+ALTER TABLE `stats_club` MODIFY `logo` varchar(100) NULL;
+ALTER TABLE `stats_club` ALTER COLUMN `logo` DROP DEFAULT;
+
+COMMIT;
