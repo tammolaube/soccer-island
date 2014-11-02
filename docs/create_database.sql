@@ -125,3 +125,8 @@ ALTER TABLE `stats_club` MODIFY `logo` varchar(100) NULL;
 ALTER TABLE `stats_club` ALTER COLUMN `logo` DROP DEFAULT;
 
 COMMIT;
+BEGIN;
+ALTER TABLE `stats_goal` DROP FOREIGN KEY stats_goal_scored_against_id_6a076a597cfdec7d_fk_stats_team_id;
+ALTER TABLE `stats_goal` DROP COLUMN `scored_against_id` CASCADE;
+
+COMMIT;

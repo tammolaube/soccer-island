@@ -163,7 +163,6 @@ class Goal(models.Model):
     scored_by = models.ForeignKey(Player, related_name='goal_scored_by')
     assisted_by = models.ForeignKey(Player, related_name='goal_assisted_by', null=True, blank=True)
     scored_for = models.ForeignKey(Team, related_name='goal_scored_for')
-    scored_against = models.ForeignKey(Team, related_name='goal_scored_against')
     scored_in = models.ForeignKey(Game)
     def __unicode__(self):
         return self.scored_in.__unicode__() + ' ' + str(self.minute) + 'min'
