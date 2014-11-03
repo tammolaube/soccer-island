@@ -1,4 +1,4 @@
-#SOCCER ISLAND - IS6050 PROJECT GROUP BY
+#SOCCER ISLAND - IS6065 PROJECT GROUP BY
 
 This system is made for the Mayor Island Soccer Organization (MISO). It will be used by fans, players, coaches, referees, and administrators of MISO.
 
