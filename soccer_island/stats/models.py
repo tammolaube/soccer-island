@@ -2,13 +2,13 @@ from django.db import models
 
 CLASSIFICATION_CHOICES = (
     ('Men', (
-            ('mopen', 'Men\'s Open'),
+            ('mope', 'Men\'s Open'),
             ('mo35', 'Men\'s 35+'),
             ('mo45', 'Men\'s Masters'),
         ),
     ),
     ('Women', (
-            ('women', 'Women\'s Open'),
+            ('wope', 'Women\'s Open'),
         ),
     ),
     ('Boys', (
@@ -28,43 +28,41 @@ CLASSIFICATION_CHOICES = (
 )
 
 class Address(models.Model):
-    street = models.CharField(max_length=100)
-    city = models.CharField(max_length=50, default='Honolulu')
+    street = models.CharField(max_length=128)
+    city = models.CharField(max_length=64, default='Honolulu')
     state = models.CharField(max_length=2, default='HI')
-    zip_code = models.CharField(max_length=20, default='968')
-    phone = models.CharField(max_length=20, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
+    zip_code = models.CharField(max_length=16, default='968')
+    phone = models.CharField(max_length=16, blank=True)
+    email = models.EmailField(blank=True)
     def __unicode__(self):
         return self.street + ' ' + self.zip_code
 
 class Person(models.Model):
-    first_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50, blank=True)
-    last_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=64)
+    middle_name = models.CharField(max_length=64, blank=True)
+    last_name = models.CharField(max_length=64)
     birthday = models.DateField()
     GENDER_CHOICES = (
             ('M', 'Male'),
             ('F', 'Female'),
         )
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=False, default='M')
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     address = models.ForeignKey(Address, blank=True, null=True)
     def __unicode__(self):
         return self.first_name + ' ' + self.last_name
 
 class Club(models.Model):
-    name = models.CharField(max_length=50)
-    short_name = models.CharField(max_length=3)
-    logo = models.ImageField(blank=True, null=True)
+    name = models.CharField(max_length=64)
+    slug = models.SlugField(max_length=64, unique=True)
     address = models.ForeignKey(Address, blank=True, null=True)
     def __unicode__(self):
         return self.name
 
 class Team(models.Model):
-    name = models.CharField(max_length=50)
-    short_name = models.CharField(max_length=3)
-    color_first = models.CharField(max_length=20)
-    color_second = models.CharField(max_length=20)
-    classification = models.CharField(max_length=5, choices=CLASSIFICATION_CHOICES)
+    name = models.CharField(max_length=64)
+    slug = models.SlugField(max_length=64, unique=True)
+    colors = models.CharField(max_length=128)
+    classification = models.CharField(max_length=4, choices=CLASSIFICATION_CHOICES)
     club = models.ForeignKey(Club, blank=True, null=True)
     def __unicode__(self):
         return self.name
@@ -109,27 +107,27 @@ class Referee(models.Model):
         return self.person.__unicode__()
 
 class Field(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=64)
     address = models.ForeignKey(Address)
     def __unicode__(self):
         return self.name
 
 class Competition(models.Model):
-    name = models.CharField(max_length=50)
-    TYPE_CHOICES = (
+    name = models.CharField(max_length=64)
+    slug = models.SlugField(max_length=64, unique=True)
+    MODE_CHOICES = (
             ('L', 'League'),
             ('C', 'Cup'),
-            ('P', 'Playoffs'),
             ('R', 'Relegation'),
         )
-    short_name = models.CharField(max_length=5)
-    mode = models.CharField(max_length=1, choices=TYPE_CHOICES)
-    classification = models.CharField(max_length=5, choices=CLASSIFICATION_CHOICES, default='mopen')
+    mode = models.CharField(max_length=1, choices=MODE_CHOICES)
+    classification = models.CharField(max_length=4, choices=CLASSIFICATION_CHOICES, default='mopen')
     def __unicode__(self):
         return self.name
 
 class Season(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=16, help_text='Enter the \'name\' of the season in the format \'2014-2015\'.')
+    slug = models.SlugField(max_length=16)
     start_date = models.DateField()
     end_date = models.DateField()
     of = models.ForeignKey(Competition)
@@ -138,8 +136,8 @@ class Season(models.Model):
         return self.name
 
 class Matchday(models.Model):
-    name = models.CharField(max_length=50)
-    short_name = models.CharField(max_length=5)
+    name = models.CharField(max_length=64)
+    slug = models.SlugField(max_length=64)
     season = models.ForeignKey(Season)
     next_matchday = models.ForeignKey("self", blank=True, null=True)
     def __unicode__(self):
@@ -154,7 +152,7 @@ class Game(models.Model):
     matchday = models.ForeignKey(Matchday)
     # for tournaments so you can create a tree, and names (e.g. Semifinal A):
     next_game = models.ForeignKey("self", blank=True, null=True)
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=64, blank=True)
     def __unicode__(self):
         return self.away_team.__unicode__() + ' vs. ' + self.home_team.__unicode__()
 
@@ -183,7 +181,7 @@ class Suspension(models.Model):
     date_received = models.DateField()
     number_games = models.SmallIntegerField()
     suspended_until = models.DateField()
-    reason = models.CharField(max_length=1000, blank=True)
+    reason = models.CharField(max_length=1024, blank=True)
     fine = models.SmallIntegerField()
     fine_paid = models.BooleanField(default=False)
     player = models.ForeignKey(Player)
