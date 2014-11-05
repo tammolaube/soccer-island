@@ -3,10 +3,16 @@ from django.template import RequestContext, loader
 
 from stats.models import Person
 
-def persons(request):
-    person_list = Person.objects.all()
-    template = loader.get_template('stats/persons.html')
+def home(request):
+    template = loader.get_template('stats/home.html')
     context = RequestContext(request, {
-        'p_l': person_list,
+    })
+    return HttpResponse(template.render(context))
+
+def stats(request, competition, season):
+    template = loader.get_template('stats/stats.html')
+    context = RequestContext(request, {
+        'competition': competition,
+        'season': season,
     })
     return HttpResponse(template.render(context))
