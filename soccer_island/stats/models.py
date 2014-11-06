@@ -131,7 +131,7 @@ class Season(models.Model):
     enrolled = models.ManyToManyField(Team)
 
     def __unicode__(self):
-        return self.name
+        return self.label
 
     def save(self, *args, **kwargs):
         self.slug = self.label
