@@ -3,10 +3,23 @@ from django.core.validators import RegexValidator
 from django.template.defaultfilters import slugify
 
 class Classification(models.Model):
-    label = models.CharField(max_length=32, unique=True, help_text='Please provide a label for the classification e.g. \'Mens Open\'.')
-    slug = models.SlugField(max_length=32, unique=True)
+    label = models.CharField(
+        max_length=32,
+        unique=True,
+        help_text='Please provide a label for the classification e.g. \'Men\'s Open\'.'
+    )
+
+    slug = models.SlugField(
+        max_length=32,
+        unique=True
+    )
+
     def __unicode__(self):
         return self.label
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.label)
+        super(Classification, self).save(*args, **kwargs)
 
 class Address(models.Model):
     street = models.CharField(max_length=128)
