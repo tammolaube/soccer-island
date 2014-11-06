@@ -65,8 +65,16 @@ class Team(models.Model):
         super(Team, self).save(*args, **kwargs)
 
 class Player(models.Model):
-    person = models.ForeignKey(Person)
-    registered = models.ManyToManyField(Team, through='PlayFor', through_fields=('player', 'team'))
+    person = models.OneToOneField(Person)
+
+    registered = models.ManyToManyField(Team,
+        through='PlayFor',
+        through_fields=(
+            'player',
+            'team'
+        )
+    )
+
     def __unicode__(self):
         return self.person.__unicode__()
 
@@ -79,8 +87,17 @@ class PlayFor(models.Model):
         return self.player.__unicode__() + ' at ' + self.team.__unicode__()
 
 class Coach(models.Model):
-    person = models.ForeignKey(Person)
-    registered = models.ManyToManyField(Team, through='CoachFor', through_fields=('coach', 'team'))
+    person = models.OneToOneField(Person)
+
+    registered = models.ManyToManyField(
+        Team,
+        through='CoachFor',
+        through_fields=(
+            'coach',
+            'team'
+        )
+    )
+
     def __unicode__(self):
         return self.person.__unicode__()
 
@@ -99,7 +116,8 @@ class CoachFor(models.Model):
         return self.coach.__unicode__() + ' ' + self.team.__unicode__()
 
 class Referee(models.Model):
-    person = models.ForeignKey(Person)
+    person = models.OneToOneField(Person)
+
     def __unicode__(self):
         return self.person.__unicode__()
 
@@ -115,8 +133,7 @@ class Competition(models.Model):
     )
 
     slug = models.SlugField(
-        max_length=64,
-        unique=True
+        max_length=64
     )
 
     MODE_CHOICES = (
