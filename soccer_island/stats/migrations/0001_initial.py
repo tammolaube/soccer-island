@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import django.core.validators
 
 
 class Migration(migrations.Migration):
@@ -14,12 +15,12 @@ class Migration(migrations.Migration):
             name='Address',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('street', models.CharField(max_length=100)),
-                ('city', models.CharField(default=b'Honolulu', max_length=50)),
+                ('street', models.CharField(max_length=128)),
+                ('city', models.CharField(default=b'Honolulu', max_length=64)),
                 ('state', models.CharField(default=b'HI', max_length=2)),
-                ('zip_code', models.CharField(default=b'968', max_length=20)),
-                ('phone', models.CharField(max_length=20, null=True, blank=True)),
-                ('email', models.EmailField(max_length=75, null=True, blank=True)),
+                ('zip_code', models.CharField(default=b'968', max_length=16)),
+                ('phone', models.CharField(max_length=16, blank=True)),
+                ('email', models.EmailField(max_length=75, blank=True)),
             ],
             options={
             },
@@ -37,12 +38,22 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
+            name='Classification',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('label', models.CharField(help_text=b"Please provide a label for the classification e.g. 'Men's Open'.", unique=True, max_length=32)),
+                ('slug', models.SlugField(unique=True, max_length=32)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='Club',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
-                ('short_name', models.CharField(max_length=3)),
-                ('logo', models.ImageField(upload_to=b'')),
+                ('name', models.CharField(max_length=64)),
+                ('slug', models.SlugField(unique=True, max_length=64)),
                 ('address', models.ForeignKey(blank=True, to='stats.Address', null=True)),
             ],
             options={
@@ -75,10 +86,10 @@ class Migration(migrations.Migration):
             name='Competition',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
-                ('short_name', models.CharField(max_length=5)),
-                ('mode', models.CharField(max_length=1, choices=[(b'L', b'League'), (b'C', b'Cup'), (b'P', b'Playoffs'), (b'R', b'Relegation')])),
-                ('classification', models.CharField(default=b'mopen', max_length=5, choices=[(b'Men', ((b'mopen', b"Men's Open"), (b'mo35', b"Men's 35+"), (b'mo45', b"Men's Masters"))), (b'Women', ((b'women', b"Women's Open"),)), (b'Boys', ((b'bu19', b'Boys U19'), (b'bu16', b'Boys U16'), (b'bu14', b'Boys U14'), (b'bu12', b'Boys U12'))), (b'Girls', ((b'gu19', b'Girls U19'), (b'gu16', b'Girls U16'), (b'gu14', b'Girls U14'), (b'gu12', b'Girls U12')))])),
+                ('name', models.CharField(max_length=64)),
+                ('slug', models.SlugField(unique=True, max_length=64)),
+                ('mode', models.CharField(max_length=1, choices=[(b'L', b'League'), (b'C', b'Cup'), (b'R', b'Relegation')])),
+                ('classification', models.ForeignKey(to='stats.Classification')),
             ],
             options={
             },
@@ -88,7 +99,7 @@ class Migration(migrations.Migration):
             name='Field',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
+                ('name', models.CharField(max_length=64)),
                 ('address', models.ForeignKey(to='stats.Address')),
             ],
             options={
@@ -100,7 +111,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('date', models.DateField()),
-                ('name', models.CharField(max_length=50)),
+                ('name', models.CharField(max_length=64, blank=True)),
             ],
             options={
             },
@@ -120,8 +131,8 @@ class Migration(migrations.Migration):
             name='Matchday',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
-                ('short_name', models.CharField(max_length=5)),
+                ('name', models.CharField(max_length=64)),
+                ('slug', models.SlugField(max_length=64)),
                 ('next_matchday', models.ForeignKey(blank=True, to='stats.Matchday', null=True)),
             ],
             options={
@@ -132,9 +143,9 @@ class Migration(migrations.Migration):
             name='Person',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('first_name', models.CharField(max_length=50)),
-                ('middle_name', models.CharField(max_length=50, blank=True)),
-                ('last_name', models.CharField(max_length=50)),
+                ('first_name', models.CharField(max_length=64)),
+                ('middle_name', models.CharField(max_length=64, blank=True)),
+                ('last_name', models.CharField(max_length=64)),
                 ('birthday', models.DateField()),
                 ('gender', models.CharField(default=b'M', max_length=1, choices=[(b'M', b'Male'), (b'F', b'Female')])),
                 ('address', models.ForeignKey(blank=True, to='stats.Address', null=True)),
@@ -179,7 +190,8 @@ class Migration(migrations.Migration):
             name='Season',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
+                ('label', models.CharField(help_text=b"Enter the label of the season in the format '2014-2015'.", max_length=9, validators=[django.core.validators.RegexValidator(regex=b'^\\d{4}-\\d{4}$', message=b"Season label must be in the format 'YYYY-YYYY'.")])),
+                ('slug', models.SlugField(max_length=9)),
                 ('start_date', models.DateField()),
                 ('end_date', models.DateField()),
             ],
@@ -194,7 +206,7 @@ class Migration(migrations.Migration):
                 ('date_received', models.DateField()),
                 ('number_games', models.SmallIntegerField()),
                 ('suspended_until', models.DateField()),
-                ('reason', models.CharField(max_length=1000, blank=True)),
+                ('reason', models.CharField(max_length=1024, blank=True)),
                 ('fine', models.SmallIntegerField()),
                 ('fine_paid', models.BooleanField(default=False)),
                 ('player', models.ForeignKey(to='stats.Player')),
@@ -207,11 +219,10 @@ class Migration(migrations.Migration):
             name='Team',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
-                ('short_name', models.CharField(max_length=3)),
-                ('color_first', models.CharField(max_length=20)),
-                ('color_second', models.CharField(max_length=20)),
-                ('classification', models.CharField(max_length=5, choices=[(b'Men', ((b'mopen', b"Men's Open"), (b'mo35', b"Men's 35+"), (b'mo45', b"Men's Masters"))), (b'Women', ((b'women', b"Women's Open"),)), (b'Boys', ((b'bu19', b'Boys U19'), (b'bu16', b'Boys U16'), (b'bu14', b'Boys U14'), (b'bu12', b'Boys U12'))), (b'Girls', ((b'gu19', b'Girls U19'), (b'gu16', b'Girls U16'), (b'gu14', b'Girls U14'), (b'gu12', b'Girls U12')))])),
+                ('name', models.CharField(max_length=64)),
+                ('slug', models.SlugField(unique=True, max_length=64)),
+                ('colors', models.CharField(max_length=128)),
+                ('classification', models.ForeignKey(to='stats.Classification')),
                 ('club', models.ForeignKey(blank=True, to='stats.Club', null=True)),
             ],
             options={
@@ -252,12 +263,6 @@ class Migration(migrations.Migration):
             model_name='goal',
             name='assisted_by',
             field=models.ForeignKey(related_name=b'goal_assisted_by', blank=True, to='stats.Player', null=True),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='goal',
-            name='scored_against',
-            field=models.ForeignKey(related_name=b'goal_scored_against', to='stats.Team'),
             preserve_default=True,
         ),
         migrations.AddField(

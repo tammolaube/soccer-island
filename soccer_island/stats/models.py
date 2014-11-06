@@ -139,12 +139,12 @@ class Competition(models.Model):
 class Season(models.Model):
     label = models.CharField(
         max_length=9,
-        help_text='Enter the label of the season in the format \'2014-2015\'.'
+        help_text='Enter the label of the season in the format \'2014-2015\'.',
         validators=[
             RegexValidator(
                 regex='^\d{4}-\d{4}$',
                 message='Season label must be in the format \'YYYY-YYYY\'.'
-            ),
+            )
         ]
     )
 
