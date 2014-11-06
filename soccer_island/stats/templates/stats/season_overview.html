@@ -5,8 +5,8 @@
 {% block content %}
   <p>List of teams enrolled in for {{ classification }} {{ competition }} {{ season }}</p>
   <ul>
-    {{ for team in teams }}
+    {% for team in teams %}
       <li>{{ team.name }}</li>
-    {{ endfor}}
+    {% endfor %}
   </ul>
 {% endblock %}
