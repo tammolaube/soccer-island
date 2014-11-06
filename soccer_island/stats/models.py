@@ -94,17 +94,34 @@ class Field(models.Model):
         return self.name
 
 class Competition(models.Model):
-    name = models.CharField(max_length=64)
-    slug = models.SlugField(max_length=64, unique=True)
+    name = models.CharField(
+        max_length=64
+    )
+
+    slug = models.SlugField(
+        max_length=64,
+        unique=True
+    )
+
     MODE_CHOICES = (
-            ('L', 'League'),
-            ('C', 'Cup'),
-            ('R', 'Relegation'),
-        )
-    mode = models.CharField(max_length=1, choices=MODE_CHOICES)
+        ('L', 'League'),
+        ('C', 'Cup'),
+        ('R', 'Relegation'),
+    )
+
+    mode = models.CharField(
+        max_length=1,
+        choices=MODE_CHOICES
+    )
+
     classification = models.ForeignKey(Classification)
+
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Competition, self).save(*args, **kwargs)
 
 class Season(models.Model):
     label = models.CharField(
