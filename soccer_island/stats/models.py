@@ -1,31 +1,10 @@
 from django.db import models
 
-CLASSIFICATION_CHOICES = (
-    ('Men', (
-            ('mope', 'Men\'s Open'),
-            ('mo35', 'Men\'s 35+'),
-            ('mo45', 'Men\'s Masters'),
-        ),
-    ),
-    ('Women', (
-            ('wope', 'Women\'s Open'),
-        ),
-    ),
-    ('Boys', (
-            ('bu19', 'Boys U19'),
-            ('bu16', 'Boys U16'),
-            ('bu14', 'Boys U14'),
-            ('bu12', 'Boys U12'),
-        ),
-    ),
-    ('Girls', (
-            ('gu19', 'Girls U19'),
-            ('gu16', 'Girls U16'),
-            ('gu14', 'Girls U14'),
-            ('gu12', 'Girls U12'),
-        ),
-    ),
-)
+class Classification(models.Model):
+    label = models.CharField(max_length=32, unique=True, help_text='Please provide a label for the classification e.g. \'Mens Open\'.')
+    slug = models.SlugField(max_length=32, unique=True)
+    def __unicode__(self):
+        return self.label
 
 class Address(models.Model):
     street = models.CharField(max_length=128)
@@ -62,7 +41,7 @@ class Team(models.Model):
     name = models.CharField(max_length=64)
     slug = models.SlugField(max_length=64, unique=True)
     colors = models.CharField(max_length=128)
-    classification = models.CharField(max_length=4, choices=CLASSIFICATION_CHOICES)
+    classification = models.ForeignKey(Classification)
     club = models.ForeignKey(Club, blank=True, null=True)
     def __unicode__(self):
         return self.name
@@ -121,7 +100,7 @@ class Competition(models.Model):
             ('R', 'Relegation'),
         )
     mode = models.CharField(max_length=1, choices=MODE_CHOICES)
-    classification = models.CharField(max_length=4, choices=CLASSIFICATION_CHOICES, default='mopen')
+    classification = models.ForeignKey(Classification)
     def __unicode__(self):
         return self.name
 
