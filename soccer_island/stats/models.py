@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.validators import RegexValidator
+from django.template.defaultfilters import slugify
 
 class Classification(models.Model):
     label = models.CharField(max_length=32, unique=True, help_text='Please provide a label for the classification e.g. \'Mens Open\'.')
@@ -105,14 +107,36 @@ class Competition(models.Model):
         return self.name
 
 class Season(models.Model):
-    name = models.CharField(max_length=16, help_text='Enter the \'name\' of the season in the format \'2014-2015\'.')
-    slug = models.SlugField(max_length=16)
+    label = models.CharField(
+        max_length=9,
+        help_text='Enter the label of the season in the format \'2014-2015\'.'
+        validators=[
+            RegexValidator(
+                regex='^\d{4}-\d{4}$',
+                message='Season label must be in the format \'YYYY-YYYY\'.'
+            ),
+        ]
+    )
+
+    slug = models.SlugField(
+        max_length=9
+    )
+
     start_date = models.DateField()
+
     end_date = models.DateField()
+
     of = models.ForeignKey(Competition)
+
     enrolled = models.ManyToManyField(Team)
+
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = self.label
+        super(Season, self).save(*args, **kwargs)
+
 
 class Matchday(models.Model):
     name = models.CharField(max_length=64)
