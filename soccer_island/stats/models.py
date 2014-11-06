@@ -60,6 +60,9 @@ class Team(models.Model):
     club = models.ForeignKey(Club, blank=True, null=True)
     def __unicode__(self):
         return self.name
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Team, self).save(*args, **kwargs)
 
 class Player(models.Model):
     person = models.ForeignKey(Person)
@@ -130,7 +133,7 @@ class Competition(models.Model):
     classification = models.ForeignKey(Classification)
 
     def __unicode__(self):
-        return self.name
+        return self.classification.__unicode__() + ': ' + self.name
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -156,7 +159,7 @@ class Season(models.Model):
 
     end_date = models.DateField()
 
-    of = models.ForeignKey(Competition)
+    competition = models.ForeignKey(Competition)
 
     enrolled = models.ManyToManyField(Team)
 

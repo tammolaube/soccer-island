@@ -21,20 +21,31 @@ from stats.models import Matchday
 class ClassificationAdmin(admin.ModelAdmin):
     exclude = ('slug',)
 
-# Register your models here.
+class CompetitionAdmin(admin.ModelAdmin):
+    exclude = ('slug',)
+
+class SeasonAdmin(admin.ModelAdmin):
+    fields = ('label', 'competition', 'start_date', 'end_date', 'enrolled',)
+
+class TeamAdmin(admin.ModelAdmin):
+    fields = ('name', 'classification', 'colors', 'club',)
+
+class ClubAdmin(admin.ModelAdmin):
+    exclude = ('slug',)
+
 admin.site.register(Classification, ClassificationAdmin)
 admin.site.register(Address)
 admin.site.register(Person)
-admin.site.register(Club)
-admin.site.register(Team)
+admin.site.register(Club, ClubAdmin)
+admin.site.register(Team, TeamAdmin)
 admin.site.register(Player)
 admin.site.register(PlayFor)
 admin.site.register(Coach)
 admin.site.register(CoachFor)
 admin.site.register(Referee)
 admin.site.register(Field)
-admin.site.register(Competition)
-admin.site.register(Season)
+admin.site.register(Competition, CompetitionAdmin)
+admin.site.register(Season, SeasonAdmin)
 admin.site.register(Game)
 admin.site.register(Goal)
 admin.site.register(Card)
