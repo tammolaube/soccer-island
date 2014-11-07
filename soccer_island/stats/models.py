@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.core.validators import RegexValidator
 from django.template.defaultfilters import slugify
@@ -33,15 +35,37 @@ class Address(models.Model):
 
 class Person(models.Model):
     first_name = models.CharField(max_length=64)
-    middle_name = models.CharField(max_length=64, blank=True)
+
+    middle_name = models.CharField(
+        max_length=64,
+        blank=True
+    )
+
     last_name = models.CharField(max_length=64)
-    birthday = models.DateField()
+
+    birthday = models.DateField(
+        blank=True,
+        null=True
+    )
+
     GENDER_CHOICES = (
             ('M', 'Male'),
             ('F', 'Female'),
         )
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
-    address = models.ForeignKey(Address, blank=True, null=True)
+
+    gender = models.CharField(
+        max_length=1,
+        choices=GENDER_CHOICES,
+        default='M',
+        blank=True
+    )
+
+    address = models.ForeignKey(
+        Address,
+        blank=True,
+        null=True
+    )
+
     def __unicode__(self):
         return self.first_name + ' ' + self.last_name
 
@@ -51,6 +75,9 @@ class Club(models.Model):
     address = models.ForeignKey(Address, blank=True, null=True)
     def __unicode__(self):
         return self.name
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Club, self).save(*args, **kwargs)
 
 class Team(models.Model):
     name = models.CharField(max_length=64)
@@ -81,7 +108,7 @@ class Player(models.Model):
 class PlayFor(models.Model):
     player = models.ForeignKey(Player)
     team = models.ForeignKey(Team)
-    from_date = models.DateField()
+    from_date = models.DateField(default=datetime.date.today)
     to_date = models.DateField(blank=True, null=True)
     def __unicode__(self):
         return self.player.__unicode__() + ' at ' + self.team.__unicode__()
@@ -123,9 +150,20 @@ class Referee(models.Model):
 
 class Field(models.Model):
     name = models.CharField(max_length=64)
+
+    slug = models.SlugField(
+        max_length=64,
+        unique=True
+    )
+
     address = models.ForeignKey(Address)
+
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = '%s-%s' % (slugify(self.name), slugify(self.address))
+        super(Field, self).save(*args, **kwargs)
 
 class Competition(models.Model):
     name = models.CharField(
@@ -150,7 +188,7 @@ class Competition(models.Model):
     classification = models.ForeignKey(Classification)
 
     def __unicode__(self):
-        return self.classification.__unicode__() + ': ' + self.name
+        return self.classification.__unicode__() + ' ' + self.name
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -181,10 +219,10 @@ class Season(models.Model):
     enrolled = models.ManyToManyField(Team)
 
     def __unicode__(self):
-        return self.label
+        return self.competition.__unicode__() + ' - ' + self.label
 
     def save(self, *args, **kwargs):
-        self.slug = self.label
+        self.slug = slugify(self.label)
         super(Season, self).save(*args, **kwargs)
 
 
@@ -192,9 +230,19 @@ class Matchday(models.Model):
     name = models.CharField(max_length=64)
     slug = models.SlugField(max_length=64)
     season = models.ForeignKey(Season)
-    next_matchday = models.ForeignKey("self", blank=True, null=True)
+
+    next_matchday = models.ForeignKey(
+        "self",
+        blank=True,
+        null=True
+    )
+
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.label)
+        super(Matchday, self).save(*args, **kwargs)
 
 class Game(models.Model):
     date = models.DateField()
