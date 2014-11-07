@@ -4,9 +4,23 @@
 
 {% block content %}
   <h1>{{ team.name }}</h1>
-  <ul>
-    {% for player in players %}
-      <li>{{ player.person }}</li>
-    {% endfor %}
-  </ul>
+  <div class="row">
+    <div class="col-md-9">
+      <h3>Roster</h3>
+      <table class="table table-bordered">
+        <tr><th>Player Name</th> <th>Position</th></tr>
+        {% for player in players %}
+        <tr><td>{{ player.person }}</td><td>{{ player.position }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+    <div class="col-md-3">
+      <h3>Enrolled in:</h3>
+      <table class="table">
+        {% for season in seasons %}
+        <tr><td>{{ season }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
 {% endblock %}

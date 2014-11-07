@@ -102,6 +102,27 @@ class Player(models.Model):
         )
     )
 
+    POSITION_CHOICES = (
+        ('', 'Allround'),
+        ('A', 'Attack'),
+        ('M', 'Midfield'),
+        ('D', 'Defense'),
+        ('G', 'Goal Keeper'),
+    )
+
+    position = models.CharField(
+        blank=True,
+        max_length=1,
+        choices=POSITION_CHOICES,
+        default=''
+    )
+
+    about = models.CharField(
+        blank=True,
+        max_length=1024,
+        default = ''
+    )
+
     def __unicode__(self):
         return self.person.__unicode__()
 

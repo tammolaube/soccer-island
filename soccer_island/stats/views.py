@@ -41,12 +41,19 @@ def roster(request, team):
     ).filter(
         Q(playfor__to_date__gte=datetime.date.today()) | Q(playfor__to_date__isnull=True),
         playfor__from_date__lte=datetime.date.today(),
-    ).distinct()
+        ).distinct()
+
+    # evaluate the query set. make select to the db
+    player_list = list(players_qs)
+    player_list = sorted(player_list, key=lambda x: 0 if x.position=='G' else 1 if x.position=='D' else 2 if x.position=='M' else 3 if x.position=='A' else 4)
+
+    seasons_qs = Season.objects.filter(enrolled=team_obj).order_by('-start_date')
 
     template = loader.get_template('stats/roster.html')
     context = RequestContext(request, {
         'team': team_obj,
-        'players': players_qs,
+        'players': player_list,
+        'seasons': seasons_qs,
     })
     return HttpResponse(template.render(context))
 
