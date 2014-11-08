@@ -327,5 +327,6 @@ class Suspension(models.Model):
     fine = models.SmallIntegerField()
     fine_paid = models.BooleanField(default=False)
     player = models.ForeignKey(Player)
+    season = models.ForeignKey(Season)
     def __unicode__(self):
         return self.player.__unicode__() + ' ' + self.date_received
