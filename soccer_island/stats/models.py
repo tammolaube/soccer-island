@@ -179,7 +179,7 @@ class CoachFor(models.Model):
             ('M', 'Manager'),
             ('A', 'Assistant Coach'),
         )
-    responsiblity = models.CharField(max_length=1, choices=RESPONSIBILITY_CHOICES, null=False, default='C')
+    responsibility = models.CharField(max_length=1, choices=RESPONSIBILITY_CHOICES, null=False, default='C')
     def __unicode__(self):
         return self.coach.__unicode__() + ' ' + self.team.__unicode__()
 
