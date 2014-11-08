@@ -104,7 +104,7 @@ class Player(models.Model):
 
     POSITION_CHOICES = (
         ('', 'Allround'),
-        ('A', 'Attack'),
+        ('F', 'Forward'),
         ('M', 'Midfield'),
         ('D', 'Defense'),
         ('G', 'Goal Keeper'),
@@ -128,9 +128,29 @@ class Player(models.Model):
 
 class PlayFor(models.Model):
     player = models.ForeignKey(Player)
+
     team = models.ForeignKey(Team)
+
     from_date = models.DateField(default=datetime.date.today)
-    to_date = models.DateField(blank=True, null=True)
+
+    to_date = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    injury_reserve = models.BooleanField(default=False)
+
+    number = models.SmallIntegerField(
+        blank=True,
+        null=True,
+        validators=[
+            RegexValidator(
+                regex='^\d{2}$',
+                message='Number must be between 0 and 99.'
+            )
+        ]
+    )
+
     def __unicode__(self):
         return self.player.__unicode__() + ' at ' + self.team.__unicode__()
 
