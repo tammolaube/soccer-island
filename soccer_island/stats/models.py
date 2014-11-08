@@ -33,6 +33,42 @@ class Address(models.Model):
     def __unicode__(self):
         return self.street + ' ' + self.zip_code
 
+class Suspension(models.Model):
+    date_received = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    number_games = models.SmallIntegerField(
+        blank=True,
+        null=True
+    )
+
+    suspended_until = models.DateField(
+        blank=True,
+        null=True
+    )
+
+    reason = models.CharField(
+        max_length=1024,
+        blank=True
+    )
+
+    fine = models.SmallIntegerField()
+
+    fine_paid = models.BooleanField(default=False)
+
+    player = models.ForeignKey('Player')
+
+    season = models.ForeignKey(
+        'Season',
+        blank=True,
+        null=True
+    )
+
+    def __unicode__(self):
+        return self.player.__unicode__() + ' ' + str(self.date_received)
+
 class Person(models.Model):
     first_name = models.CharField(max_length=64)
 
@@ -125,6 +161,15 @@ class Player(models.Model):
 
     def __unicode__(self):
         return self.person.__unicode__()
+
+    def current_suspensions(self):
+        return Suspension.objects.filter(
+            player=self,
+            suspended_until__gt=datetime.date.today,
+            date_received__lt=datetime.date.today
+        )
+
+
 
 class PlayFor(models.Model):
     player = models.ForeignKey(Player)
@@ -319,14 +364,3 @@ class Card(models.Model):
     def __unicode__(self):
         return self.received_in.__unicode__() + ' ' + str(self.minute) + 'min'
 
-class Suspension(models.Model):
-    date_received = models.DateField()
-    number_games = models.SmallIntegerField()
-    suspended_until = models.DateField()
-    reason = models.CharField(max_length=1024, blank=True)
-    fine = models.SmallIntegerField()
-    fine_paid = models.BooleanField(default=False)
-    player = models.ForeignKey(Player)
-    season = models.ForeignKey(Season, blank=True, null=True)
-    def __unicode__(self):
-        return self.player.__unicode__() + ' ' + self.date_received

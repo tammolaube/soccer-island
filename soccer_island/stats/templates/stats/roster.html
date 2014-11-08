@@ -9,18 +9,41 @@
       <h3>Roster</h3>
       <table class="table table-bordered com-islandsoccer--roster">
         <tr><th>#</th><th>Name</th></tr>
-        {% for playfor in current_playfors %}
-        <tr class="{{ playfor.player.position }}{{ playfor.injury_reserve|yesno:" injury-reserve," }}">
+        {% regroup current_playfors by injury_reserve as current_playfors_by_ir %}
+        {% for current_playfors in current_playfors_by_ir %}
+          {% if current_playfors.grouper %}
+        <tr><th colspan="2">Injury Reserve</th></tr>
+          {% endif %}
+          {% for playfor in current_playfors.list %}
+          <tr class="{{ playfor.player.position }}{{ playfor.player.current_suspensions|yesno:" suspended," }}{{ playfor.injury_reserve|yesno:" injury-reserve," }}">
           <td class="col-md-1">{{ playfor.number|default_if_none:"-" }}</td>
           <td>
             {{ playfor.player.person }}
-            {% if playfor.injury_reserve %}
+            {% for suspension in playfor.player.current_suspensions %}
             <span>
-              <abbr title="Injury Reserve" class="initialism">IR</abbr>
+              <a href="#"
+                tabindex="0"
+                class="btn btn-xs btn-danger suspension-popover"
+                role="button"
+                data-toggle="popover"
+                data-trigger="focus"
+                title="Suspension&nbsp;{{ suspension.suspended_until|timeuntil:suspension.date_received }}"
+                data-html="True"
+                data-content="
+                <dl>
+                  <dt>Season</dt>
+                  <dd>{{ suspension.season|default_if_none:"All competitions" }}</dd>
+                  <dt>Until</dt>
+                  <dd>{{ suspension.suspended_until }}</dd>
+                </dl>
+                ">
+                {{ suspension.suspended_until|timeuntil }} left
+              </a>
             </span>
-            {% endif %}
+            {% endfor %}
           </td>
         </tr>
+          {% endfor %}
         {% endfor %}
       </table>
       <h3>Former Players</h3>
