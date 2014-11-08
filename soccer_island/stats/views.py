@@ -5,7 +5,7 @@ from django.template import RequestContext, loader
 from django.shortcuts import get_object_or_404
 from django.db.models import F, Q
 
-from stats.models import Classification, Competition, Season, Team, Player, PlayFor
+from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor
 
 def get_season_by_slugs(classification, competition, season):
     """
@@ -55,21 +55,42 @@ def roster(request, team):
             else ( x.injury_reserve, 4, x.number )
     )
 
-    # gets former playfors
+    # gets former playfors. the last 11
     former_playfors_qs = PlayFor.objects.filter(
         team__slug=team,
         to_date__lt=datetime.date.today()
     ).order_by(
         'to_date'
+        )[:11]
+
+    # gets all current coachfors
+    current_coachfors_qs = CoachFor.objects.filter(
+        team__slug=team,
+    ).exclude(
+        to_date__lt=datetime.date.today()
     )
 
-    seasons_qs = Season.objects.filter(enrolled=team_obj).order_by('-start_date')
+    # make it a list; evaluate the query set (make select to the db)
+    # sort the list by responsibility Coach < Assitant Coach < Manager
+    current_coachfor_list = list(current_coachfors_qs)
+    current_coachfor_list = sorted(current_coachfor_list,
+        key=lambda x:
+            0 if x.responsibility=='C'
+            else 1 if x.responsibility=='A'
+            else 2 if x.responsibility=='M'
+            else 3
+    )
 
+    # get seasons the team is enrolled in
+    seasons_qs = Season.objects.filter(enrolled=team_obj).order_by('-end_date')
+
+    # get template and pass the collected data via context; return the view
     template = loader.get_template('stats/roster.html')
     context = RequestContext(request, {
         'team': team_obj,
         'current_playfors': current_playfor_list,
         'former_playfors': former_playfors_qs,
+        'current_coachfors': current_coachfor_list,
         'seasons': seasons_qs,
     })
     return HttpResponse(template.render(context))

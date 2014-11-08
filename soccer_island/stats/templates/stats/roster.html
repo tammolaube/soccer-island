@@ -3,21 +3,60 @@
 {% block title %}Roster of {{ team }} {% endblock %}
 
 {% block content %}
-  <h1>{{ team.name }}</h1>
+<h1>{{ team.name }} <small>{{ team.classification }}</small></h1>
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-6">
       <h3>Roster</h3>
-      <table class="table table-bordered">
-        <tr><th>#</th><th>Player Name</th></tr>
+      <table class="table table-bordered com-islandsoccer--roster">
+        <tr><th>#</th><th>Name</th></tr>
         {% for playfor in current_playfors %}
-        <tr class="{{ playfor.player.position }}{{ playfor.injury_reserve|yesno:" injury_reserve," }}"><td>{{ playfor.number|default_if_none:"-" }}</td><td>{{ playfor.player.person }}</td></tr>
+        <tr class="{{ playfor.player.position }}{{ playfor.injury_reserve|yesno:" injury-reserve," }}">
+          <td class="col-md-1">{{ playfor.number|default_if_none:"-" }}</td>
+          <td>
+            {{ playfor.player.person }}
+            {% if playfor.injury_reserve %}
+            <span>
+              <abbr title="Injury Reserve" class="initialism">IR</abbr>
+            </span>
+            {% endif %}
+          </td>
+        </tr>
         {% endfor %}
       </table>
       <h3>Former Players</h3>
       <table class="table table-bordered">
-        <tr><th>Player Name</th><th>From</th><th>To</th></tr>
+        <tr><th>Name</th><th>From</th><th>To</th></tr>
         {% for playfor in former_playfors %}
-        <tr><td>{{ playfor.player.person }}</td><td>{{ playfor.from_date }}</td><td>{{ playfor.to_date }}</td></tr>
+        <tr>
+          <td>{{ playfor.player.person }}</td>
+          <td class="col-md-3">{{ playfor.from_date }}</td>
+          <td class="col-md-3">{{ playfor.to_date }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <div class="col-md-3">
+      <h3>Responsible:</h3>
+      <table class="table table-striped">
+        {% for coachfor in current_coachfors %}
+        <tr>
+          <td>
+            <h4>
+              {{ coachfor.coach }} <br/>
+              <small>
+                {% if coachfor.responsibility == "A" %}
+                Assistant Coach
+                {% elif coachfor.responsibility == "M" %}
+                Manager
+                {% else %}
+                Coach
+                {% endif %}
+              </small>
+            </h4>
+            Email: {{ coachfor.coach.person.address.email|default:"-" }} <br/>
+            Phone: {{ coachfor.coach.person.address.phone|default:"-" }}
+          </td>
+        </tr>
         {% endfor %}
       </table>
     </div>
