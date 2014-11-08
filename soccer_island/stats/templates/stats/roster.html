@@ -8,9 +8,16 @@
     <div class="col-md-9">
       <h3>Roster</h3>
       <table class="table table-bordered">
-        <tr><th>Player Name</th> <th>Position</th></tr>
-        {% for player in players %}
-        <tr><td>{{ player.person }}</td><td>{{ player.position }}</td></tr>
+        <tr><th>#</th><th>Player Name</th></tr>
+        {% for playfor in current_playfors %}
+        <tr class="{{ playfor.player.position }}{{ playfor.injury_reserve|yesno:" injury_reserve," }}"><td>{{ playfor.number|default_if_none:"-" }}</td><td>{{ playfor.player.person }}</td></tr>
+        {% endfor %}
+      </table>
+      <h3>Former Players</h3>
+      <table class="table table-bordered">
+        <tr><th>Player Name</th><th>From</th><th>To</th></tr>
+        {% for playfor in former_playfors %}
+        <tr><td>{{ playfor.player.person }}</td><td>{{ playfor.from_date }}</td><td>{{ playfor.to_date }}</td></tr>
         {% endfor %}
       </table>
     </div>

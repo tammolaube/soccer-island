@@ -145,7 +145,7 @@ class PlayFor(models.Model):
         null=True,
         validators=[
             RegexValidator(
-                regex='^\d{2}$',
+                regex='^\d{1,2}$',
                 message='Number must be between 0 and 99.'
             )
         ]

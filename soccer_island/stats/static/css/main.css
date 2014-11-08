@@ -4,3 +4,19 @@ body {
 .img-center {
   margin: 0 auto;
 }
+tr.G td:first-child {
+  border-left-color: #F4BF75;
+  border-left-width: 5px;
+}
+tr.D td:first-child {
+  border-left-color: #6A9FB5;
+  border-left-width: 5px;
+}
+tr.M td:first-child {
+  border-left-color: #90A959;
+  border-left-width: 5px;
+}
+tr.F td:first-child {
+  border-left-color: #AC4142;
+  border-left-width: 5px;
+}
