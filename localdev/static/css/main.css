@@ -1,0 +1,32 @@
+body {
+  padding-top: 70px;
+}
+.img-center {
+  margin: 0 auto;
+}
+table.com-islandsoccer--roster tr td:first-child,
+table.com-islandsoccer--roster tr th:first-child {
+  border-left-width: 5px;
+}
+table.com-islandsoccer--roster tr.G td:first-child {
+  border-left-color: #FC6;
+}
+table.com-islandsoccer--roster tr.D td:first-child {
+  border-left-color: #9C9;
+}
+table.com-islandsoccer--roster tr.M td:first-child {
+  border-left-color: #69C;
+}
+table.com-islandsoccer--roster tr.F td:first-child {
+  border-left-color: #F2777A;
+}
+table.com-islandsoccer--roster tr.injury-reserve {
+  background: #FFFACD;
+}
+table.com-islandsoccer--roster tr.suspended {
+  background: #FAEBD7;
+}
+table.com-islandsoccer--roster tr.suspended td span {
+  float: right;
+  white-space: nowrap;
+}
