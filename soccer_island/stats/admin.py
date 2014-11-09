@@ -33,6 +33,9 @@ class TeamAdmin(admin.ModelAdmin):
 class ClubAdmin(admin.ModelAdmin):
     exclude = ('slug',)
 
+class MatchdayAdmin(admin.ModelAdmin):
+    exclude = ('slug',)
+
 admin.site.register(Classification, ClassificationAdmin)
 admin.site.register(Address)
 admin.site.register(Person)
@@ -50,4 +53,4 @@ admin.site.register(Game)
 admin.site.register(Goal)
 admin.site.register(Card)
 admin.site.register(Suspension)
-admin.site.register(Matchday)
+admin.site.register(Matchday, MatchdayAdmin)

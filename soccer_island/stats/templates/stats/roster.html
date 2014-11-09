@@ -3,11 +3,13 @@
 {% block title %}Roster of {{ team }} {% endblock %}
 
 {% block content %}
-<h1>{{ team.name }} <small>{{ team.classification }}</small></h1>
+<div class="page-header">
+  <h1>{{ team.name }} <small>{{ team.classification }}</small></h1>
+</div>
   <div class="row">
     <div class="col-md-6">
       <h3>Roster</h3>
-      <table class="table table-bordered com-islandsoccer--roster">
+      <table class="table table-bordered com-soccerisland--roster">
         <tr><th>#</th><th>Name</th></tr>
         {% regroup current_playfors by injury_reserve as current_playfors_by_ir %}
         {% for current_playfors in current_playfors_by_ir %}

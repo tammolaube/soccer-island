@@ -4,8 +4,9 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.shortcuts import get_object_or_404
 from django.db.models import F, Q
+from django.views.generic.list import ListView
 
-from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor
+from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor, Matchday
 
 def get_season_by_slugs(classification, competition, season):
     """
@@ -108,6 +109,25 @@ def season_teams(request, classification, competition, season):
         'teams': teams,
     })
     return HttpResponse(template.render(context))
+
+class MatchdayListView(ListView):
+    model = Matchday
+    context_object_name = 'matchday_list'
+    template_name = 'stats/schedule.html'
+    season = None
+
+    def get_queryset(self, **kwargs):
+        self.season = get_season_by_slugs(
+            self.kwargs['classification'],
+            self.kwargs['competition'],
+            self.kwargs['season']
+        )
+        return Matchday.objects.filter(season=self.season).order_by('date')
+
+    def get_context_data(self, **kwargs):
+        context = super(MatchdayListView, self).get_context_data(**kwargs)
+        context['season'] = self.season
+        return context
 
 def season_overview(request, classification, competition, season):
     classifications_qs = Classification.objects.filter(slug=classification)

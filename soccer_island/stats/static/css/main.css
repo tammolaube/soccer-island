@@ -1,32 +1,38 @@
 body {
-  padding-top: 70px;
+  padding-top: 50px;
 }
 .img-center {
   margin: 0 auto;
 }
-table.com-islandsoccer--roster tr td:first-child,
-table.com-islandsoccer--roster tr th:first-child {
+table.com-soccerisland--roster tr td:first-child,
+table.com-soccerisland--roster tr th:first-child {
   border-left-width: 5px;
 }
-table.com-islandsoccer--roster tr.G td:first-child {
+table.com-soccerisland--roster tr.G td:first-child {
   border-left-color: #FC6;
 }
-table.com-islandsoccer--roster tr.D td:first-child {
+table.com-soccerisland--roster tr.D td:first-child {
   border-left-color: #9C9;
 }
-table.com-islandsoccer--roster tr.M td:first-child {
+table.com-soccerisland--roster tr.M td:first-child {
   border-left-color: #69C;
 }
-table.com-islandsoccer--roster tr.F td:first-child {
+table.com-soccerisland--roster tr.F td:first-child {
   border-left-color: #F2777A;
 }
-table.com-islandsoccer--roster tr.injury-reserve {
+table.com-soccerisland--roster tr.injury-reserve {
   background: #FFFACD;
 }
-table.com-islandsoccer--roster tr.suspended {
+table.com-soccerisland--roster tr.suspended {
   background: #FAEBD7;
 }
-table.com-islandsoccer--roster tr.suspended td span {
+table.com-soccerisland--roster tr.suspended td span {
   float: right;
   white-space: nowrap;
+}
+div.com-soccerisland--matchday div.panel-heading > span {
+  float: right;
+}
+div.com-soccerisland--matchday div.panel-heading span.label {
+  vertical-align: middle;
 }

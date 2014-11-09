@@ -313,18 +313,26 @@ class Season(models.Model):
 
 
 class Matchday(models.Model):
-    name = models.CharField(max_length=64)
-    slug = models.SlugField(max_length=64)
+    label = models.CharField(
+        max_length=32,
+        help_text='Please provide a label. For examle: \'Matchday 1\', \'Round of 16\', \'Playoffs: Final\''
+    )
+
+    slug = models.SlugField(max_length=32)
+
     season = models.ForeignKey(Season)
 
-    next_matchday = models.ForeignKey(
-        "self",
+    date = models.DateField()
+
+    '''
+    end_date = models.DateField(
         blank=True,
         null=True
     )
+    '''
 
     def __unicode__(self):
-        return self.name
+          return self.label
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.label)
