@@ -1,0 +1,17 @@
+<div class="col-md-4 com-soccerisland--matchday">
+  <div class="panel panel-default">
+    <div class="panel-heading">{{ matchday }}<span><span class="label label-default">{{ matchday.date }}</span></span></div>
+    <table class="table table-condensed">
+      {% for game in matchday.game_set.all %}
+      <tr class="game-score">
+        <td class="col-md-5 text-center text-nowrap">{{ game.home_team }}</td>
+        <td class="col-md-2 text-center text-nowrap">{{ game.get_score }}</td>
+        <td class="col-md-5 text-center text-nowrap">{{ game.away_team }}</td>
+      </tr>
+      <tr class="game-field">
+        <td colspan="3" class="text-center text-nowrap col-md-12"><small>{{ game.date }} <br/> {{ game.field }}</small></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>

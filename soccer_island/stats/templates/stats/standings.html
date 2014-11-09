@@ -7,7 +7,7 @@
 
   <ul>
     {% for team in teams %}
-      <li>{{ team.name }}</li>
+      <li>{{ team.name }} {{ team.num_games }} {{ team.num_wins }} {{ team.num_draws }} {{ team.num_losses }} {{ team.num_goals_scored }} </li>
     {% endfor %}
   </ul>
 {% endblock %}

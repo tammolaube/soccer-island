@@ -29,17 +29,17 @@
                 role="button"
                 data-toggle="popover"
                 data-trigger="focus"
-                title="Suspension&nbsp;{{ suspension.suspended_until|timeuntil:suspension.date_received }}"
+                title="Suspension ({{ suspension.suspended_until|timeuntil:suspension.date_received }})"
                 data-html="True"
                 data-content="
-                <dl>
-                  <dt>Season</dt>
-                  <dd>{{ suspension.season|default_if_none:"All competitions" }}</dd>
-                  <dt>Until</dt>
-                  <dd>{{ suspension.suspended_until }}</dd>
-                </dl>
+                <div class='text-nowrap'>
+                  {{ suspension.season|default_if_none:"All&nbsp;seasons" }}
+                </div>
+                <div class='text-nowrap'>
+                  {{ suspension.date_received }} - {{ suspension.suspended_until }}
+                </div>
                 ">
-                {{ suspension.suspended_until|timeuntil }} left
+                 <span class="glyphicon glyphicon-ban-circle"></span> {{ suspension.suspended_until|timeuntil }} left
               </a>
             </span>
             {% endfor %}
@@ -94,4 +94,10 @@
       </table>
     </div>
   </div>
+{% endblock %}
+
+{% block script %}
+  $( document ).ready(function() {
+    $('.suspension-popover').popover();
+  });
 {% endblock %}

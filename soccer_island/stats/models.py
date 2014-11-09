@@ -39,11 +39,6 @@ class Suspension(models.Model):
         null=True
     )
 
-    number_games = models.SmallIntegerField(
-        blank=True,
-        null=True
-    )
-
     suspended_until = models.DateField(
         blank=True,
         null=True
@@ -332,36 +327,84 @@ class Matchday(models.Model):
     '''
 
     def __unicode__(self):
-          return self.label
+        return self.label
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.label)
         super(Matchday, self).save(*args, **kwargs)
 
-class Game(models.Model):
-    date = models.DateField()
-    away_team = models.ForeignKey(Team, related_name='game_away_team')
-    home_team = models.ForeignKey(Team, related_name='game_home_team')
-    referee = models.ForeignKey(Referee)
-    field = models.ForeignKey(Field)
-    matchday = models.ForeignKey(Matchday)
-    # for tournaments so you can create a tree, and names (e.g. Semifinal A):
-    next_game = models.ForeignKey("self", blank=True, null=True)
-    name = models.CharField(max_length=64, blank=True)
-    def __unicode__(self):
-        return self.away_team.__unicode__() + ' vs. ' + self.home_team.__unicode__()
-
 class Goal(models.Model):
-    minute = models.SmallIntegerField()
+    minute = models.SmallIntegerField(blank=True, null=True)
     scored_by = models.ForeignKey(Player, related_name='goal_scored_by')
     assisted_by = models.ForeignKey(Player, related_name='goal_assisted_by', null=True, blank=True)
     scored_for = models.ForeignKey(Team, related_name='goal_scored_for')
-    scored_in = models.ForeignKey(Game)
+    game = models.ForeignKey('Game')
     def __unicode__(self):
-        return self.scored_in.__unicode__() + ' ' + str(self.minute) + 'min'
+        return self.game.__unicode__() + ' ' + str(self.minute) + 'min'
+
+class Game(models.Model):
+    date = models.DateTimeField()
+
+    away_team = models.ForeignKey(
+        Team,
+        related_name='game_away_team'
+    )
+
+    home_team = models.ForeignKey(
+        Team,
+        related_name='game_home_team'
+    )
+
+    referee = models.ForeignKey(Referee)
+
+    field = models.ForeignKey(Field)
+
+    matchday = models.ForeignKey(Matchday)
+
+    played = models.BooleanField(
+        default=False,
+        help_text='Set this to true after the game has been played and all data has been inserted. It will then be used for calculations of standings.'
+    )
+
+    # for knock-out mode, see help_texts
+    next_game = models.ForeignKey(
+        "self",
+        blank=True,
+        null=True,
+        help_text='For knock-out mode only. To create a tree of teams advancing.'
+    )
+
+    name = models.CharField(
+        max_length=64,
+        blank=True,
+        help_text='For knock-out mode only (e.g. Semifinal A).'
+    )
+
+    def get_home_goals(self):
+        return Goal.objects.filter(game=self).filter(scored_for=self.home_team)
+
+    def get_away_goals(self):
+        return Goal.objects.filter(game=self).filter(scored_for=self.away_team)
+
+    def get_score(self):
+        if self.played:
+            return '{0} - {1}'.format(self.get_home_goals().count(), self.get_away_goals().count())
+        else:
+            return ' - '
+
+    def get_winner(self):
+        if self.get_home_goals().count() > self.get_away_goals().count():
+            return self.home_team
+        elif self.get_home_goals().count() < self.get_away_goals().count():
+            return self.away_team
+        else:
+            return None
+
+    def __unicode__(self):
+        return '{0} vs {1} ({2})'.format(self.home_team.__unicode__(), self.away_team.__unicode__(), self.date)
 
 class Card(models.Model):
-    minute = models.SmallIntegerField()
+    minute = models.SmallIntegerField(blank=True, null=True)
     COLOR_CHOICES = (
             ('Y', 'Yellow'),
             ('R', 'Red'),

@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import F, Q
 from django.views.generic.list import ListView
 
-from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor, Matchday
+from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor, Matchday, Game, Goal
 
 def get_season_by_slugs(classification, competition, season):
     """
@@ -96,20 +96,6 @@ def roster(request, team):
     })
     return HttpResponse(template.render(context))
 
-def season_teams(request, classification, competition, season):
-    season_obj = get_season_by_slugs(classification, competition, season)
-    if not season_obj:
-         raise Http404
-
-    teams = Team.objects.filter(season=season_obj)
-
-    template = loader.get_template('stats/season_teams.html')
-    context = RequestContext(request, {
-        'season': season_obj,
-        'teams': teams,
-    })
-    return HttpResponse(template.render(context))
-
 class MatchdayListView(ListView):
     model = Matchday
     context_object_name = 'matchday_list'
@@ -129,17 +115,32 @@ class MatchdayListView(ListView):
         context['season'] = self.season
         return context
 
-def season_overview(request, classification, competition, season):
-    classifications_qs = Classification.objects.filter(slug=classification)
-    competitions_qs = Competition.objects.filter(classification__in=classifications_qs, slug=competition)
-    seasons_qs = Season.objects.filter(competition__in=competitions_qs, slug=season)
-    teams = Team.objects.filter(season__in=seasons_qs)
+def standings(request, classification, competition, season):
+    season_obj = get_season_by_slugs(classification, competition, season)
+    if not season_obj:
+         raise Http404
 
-    template = loader.get_template('stats/season_overview.html')
+    teams = Team.objects.filter(season=season_obj)
+    games_played_in_season = Game.objects.filter(matchday__season=season_obj).filter(played=True)
+
+    for team in teams:
+        games_of_team = games_played_in_season.filter(Q(home_team=team) | Q(away_team=team))
+
+        team.num_games = games_of_team.count()
+        team.num_wins = 0
+        team.num_draws = 0
+        for game in games_of_team:
+            if game.get_winner() == team:
+                team.num_wins += 1
+            elif game.get_winner() == None:
+                team.num_draws += 1
+        team.num_losses = team.num_games - team.num_wins - team.num_draws
+
+        team.num_goals_scored = Goal.objects.filter(game__matchday__season=season_obj).filter(scored_for=team).count
+
+    template = loader.get_template('stats/standings.html')
     context = RequestContext(request, {
-        'classification': classification,
-        'competition': competition,
-        'season': season,
+        'season': season_obj,
         'teams': teams,
     })
     return HttpResponse(template.render(context))

@@ -26,7 +26,7 @@ table.com-soccerisland--roster tr.injury-reserve {
 table.com-soccerisland--roster tr.suspended {
   background: #FAEBD7;
 }
-table.com-soccerisland--roster tr.suspended td span {
+table.com-soccerisland--roster tr.suspended td > span {
   float: right;
   white-space: nowrap;
 }
@@ -35,4 +35,13 @@ div.com-soccerisland--matchday div.panel-heading > span {
 }
 div.com-soccerisland--matchday div.panel-heading span.label {
   vertical-align: middle;
+}
+div.com-soccerisland--matchday div.panel li.game-score {
+  display: inline-block;
+}
+div.com-soccerisland--matchday div.panel tr.game-score > td {
+  border-bottom: none;
+}
+div.com-soccerisland--matchday div.panel tr.game-field > td {
+  border-top: none;
 }

@@ -69,5 +69,12 @@
 
     <!-- Inlude the main.js  -->
     <script src="{% static 'js/main.js' %}"></script>
+
+    <script type="text/javascript">
+      {% block script %}
+
+      {% endblock %}
+    </script>
+
   </body>
 </html>
