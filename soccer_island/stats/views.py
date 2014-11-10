@@ -120,27 +120,48 @@ def standings(request, classification, competition, season):
     if not season_obj:
          raise Http404
 
-    teams = Team.objects.filter(season=season_obj)
+    teams_list = Team.objects.filter(season=season_obj)
     games_played_in_season = Game.objects.filter(matchday__season=season_obj).filter(played=True)
 
-    for team in teams:
+    for team in teams_list:
         games_of_team = games_played_in_season.filter(Q(home_team=team) | Q(away_team=team))
 
         team.num_games = games_of_team.count()
         team.num_wins = 0
         team.num_draws = 0
+        team.num_losses = 0
+        team.num_scored_goals = 0
+        team.num_conceded_goals = 0
+
         for game in games_of_team:
             if game.get_winner() == team:
                 team.num_wins += 1
             elif game.get_winner() == None:
                 team.num_draws += 1
-        team.num_losses = team.num_games - team.num_wins - team.num_draws
+            else:
+                team.num_losses += 1
 
-        team.num_goals_scored = Goal.objects.filter(game__matchday__season=season_obj).filter(scored_for=team).count
+            if team == game.home_team:
+                team.num_scored_goals += game.get_home_goals().count()
+                team.num_conceded_goals += game.get_away_goals().count()
+            else:
+                team.num_scored_goals += game.get_away_goals().count()
+                team.num_conceded_goals += game.get_home_goals().count()
+
+        team.num_points = team.num_draws + team.num_wins * 3
+
+    teams_list.order_by('points')
+
+    current_and_next_matchday_list = Matchday.objects.filter(
+        season=season_obj
+    ).filter(
+        date__gt=(datetime.date.today() - datetime.timedelta(days=7))
+    ).order_by('date')[:2]
 
     template = loader.get_template('stats/standings.html')
     context = RequestContext(request, {
         'season': season_obj,
-        'teams': teams,
+        'teams': teams_list,
+        'matchdays': current_and_next_matchday_list,
     })
     return HttpResponse(template.render(context))

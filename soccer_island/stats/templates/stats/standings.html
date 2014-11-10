@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Enrolled Teams {{ season }} {% endblock %}
+{% block title %}Standings - {{ season }}{% endblock %}
 
 {% block content %}
-  <h1>Enrolled Teams <small>{{ season }}</small></h1>
+  <h1>Standings <small>{{ season }}</small></h1>
 
   <ul>
     {% for team in teams %}
-      <li>{{ team.name }} {{ team.num_games }} {{ team.num_wins }} {{ team.num_draws }} {{ team.num_losses }} {{ team.num_goals_scored }} </li>
+      <li>{{ team.name }} {{ team.num_games }} {{ team.num_wins }} {{ team.num_draws }} {{ team.num_losses }} {{ team.num_scored_goals }} {{ team.num_conceded_goals }} {{ team.num_points}} </li>
     {% endfor %}
   </ul>
+
+  {% for matchday in matchdays %}
+    {{ matchday }} <br/>
+  {% endfor %}
 {% endblock %}
