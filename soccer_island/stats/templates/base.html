@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {# This block title should be changed in templates that extend base #}
     <title>{% block title %}Soccer Island{% endblock %}</title>
 
     <!-- Bootstrap -->
@@ -20,47 +22,19 @@
     <![endif]-->
   </head>
   <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">
-            <img alt="Brand" src="{% static 'img/miso_logo.png' %}" style="margin-top: -11px;">
-          </a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            {% block navbar %}
-            <li>
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Men's Open Div</a>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="/stats/div1/2014">DIV I</a></li>
-                    <li><a href="/stats/div2/2014">DIV II</a></li>
-                    <li><a href="/stats/div3/2014">DIV III</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Records</a></li>
-                </ul>
-            </li>
-            <li><a href="#">W1 Div</a></li>
-            <li><a href="#">M35+ Div</a></li>
-            <li><a href="#">Masters Div</a></li>
-            <li><a href="#">MISO Juniors</a></li>
-            {% endblock %}
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+
+    {# Here we include the navigaition bar to keep the base clearer #}
+    {% include 'navigation.html' %}
 
     <div class="container">
+      {# This block holds all content of the page #}
       {% block content %}
 
       {% endblock %}
     </div><!-- /.container -->
+
+    {# Here we include the footer bar to keep the base clearer #}
+    {% include 'footer.html' %}
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="{% static 'js/jquery.min.js' %}"></script>
@@ -70,7 +44,18 @@
     <!-- Inlude the main.js  -->
     <script src="{% static 'js/main.js' %}"></script>
 
+    {# A block to include custom, template page individual JavaScrip files #}
+    {% block script-includes %}
+
+    {% endblock %}
+
     <script type="text/javascript">
+
+      {# A block to write custom, template page individual JavaScrip code #}
+      {% comment %}
+        For example: For performance reasons, I only want to initialize
+        bootstraps Popover on the roster page.
+      {% endcomment %}
       {% block script %}
 
       {% endblock %}
