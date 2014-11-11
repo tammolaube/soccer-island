@@ -13,7 +13,7 @@ urlpatterns = patterns('',
         name='roster'
     ),
     url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/$',
-        views.standings,
+        views.StandingsTemplateView.as_view(),
         name='standings'
     ),
     url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/schedule/$',

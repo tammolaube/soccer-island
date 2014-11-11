@@ -375,6 +375,14 @@ class Season(models.Model):
 
         return season_obj
 
+    def get_teams(self):
+
+        return Team.objects.filter(season=self)
+
+    def get_games_played(self):
+
+        return Game.objects.filter(matchday__season=self).filter(played=True)
+
     def __unicode__(self):
 
         return self.competition.__unicode__() + ' - ' + self.label
