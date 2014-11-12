@@ -383,6 +383,19 @@ class Season(models.Model):
 
         return Game.objects.filter(matchday__season=self).filter(played=True)
 
+    def get_goals(self):
+
+        return Goal.objects.filter(game__matchday__season=self)
+
+    def count_goals(self):
+
+        return self.get_goals().count()
+
+    def get_goal_scorers(self):
+
+        return Player.objects.filter(goal_scored_by__in=self.get_goals().
+            filter(own_goal=False))
+
     def __unicode__(self):
 
         return self.competition.__unicode__() + ' - ' + self.label
@@ -417,7 +430,12 @@ class Matchday(models.Model):
 class Goal(models.Model):
 
     minute = models.SmallIntegerField(blank=True, null=True)
-    scored_by = models.ForeignKey(Player, related_name='goal_scored_by')
+    scored_by = models.ForeignKey(
+        Player,
+        related_name='goal_scored_by',
+        blank=True,
+        null=True
+    )
     assisted_by = models.ForeignKey(
         Player,
         related_name='goal_assisted_by',
@@ -426,6 +444,7 @@ class Goal(models.Model):
     )
     scored_for = models.ForeignKey(Team, related_name='goal_scored_for')
     game = models.ForeignKey('Game')
+    own_goal = models.BooleanField(default=False)
 
     def __unicode__(self):
 
