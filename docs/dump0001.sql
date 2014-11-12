@@ -92,7 +92,7 @@ CREATE TABLE `db` (
 
 LOCK TABLES `db` WRITE;
 /*!40000 ALTER TABLE `db` DISABLE KEYS */;
-INSERT INTO `db` VALUES ('localhost','soccer_island','django','Y','Y','Y','Y','Y','Y','N','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y');
+INSERT INTO `db` VALUES ('localhost','soccer_island','django','Y','Y','Y','Y','Y','Y','N','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'),('localhost','test_soccer_island','django','Y','Y','Y','Y','Y','Y','N','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y');
 /*!40000 ALTER TABLE `db` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1002,7 +1002,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1011,7 +1011,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2014-11-06 21:22:22'),(2,'auth','0001_initial','2014-11-06 21:22:22'),(3,'admin','0001_initial','2014-11-06 21:22:22'),(4,'sessions','0001_initial','2014-11-06 21:22:22'),(5,'stats','0001_initial','2014-11-06 21:22:27'),(6,'stats','0002_auto_20141106_1156','2014-11-06 21:56:58'),(7,'stats','0003_auto_20141106_1200','2014-11-06 22:00:48'),(8,'stats','0004_auto_20141106_2156','2014-11-07 07:56:39'),(9,'stats','0005_auto_20141106_2156','2014-11-07 07:56:39'),(10,'stats','0006_auto_20141107_1514','2014-11-08 01:14:51'),(11,'stats','0007_auto_20141107_2222','2014-11-08 08:22:23'),(12,'stats','0008_suspension_season','2014-11-08 18:02:19'),(13,'stats','0009_auto_20141108_0918','2014-11-08 19:18:19'),(14,'stats','0010_auto_20141108_1955','2014-11-09 05:55:59'),(15,'stats','0011_auto_20141108_2112','2014-11-09 07:12:47'),(16,'stats','0012_matchday_end_date','2014-11-09 07:18:52'),(17,'stats','0013_remove_matchday_end_date','2014-11-09 07:22:09'),(18,'stats','0014_auto_20141109_0849','2014-11-09 18:49:31'),(19,'stats','0015_auto_20141109_0911','2014-11-09 19:11:31'),(20,'stats','0016_remove_suspension_number_games','2014-11-09 19:37:28'),(21,'stats','0017_auto_20141109_1033','2014-11-09 20:33:54'),(22,'stats','0018_auto_20141109_1106','2014-11-09 21:06:44'),(23,'stats','0019_auto_20141109_1207','2014-11-09 22:07:41'),(24,'stats','0020_auto_20141109_1220','2014-11-09 22:20:49');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2014-11-06 21:22:22'),(2,'auth','0001_initial','2014-11-06 21:22:22'),(3,'admin','0001_initial','2014-11-06 21:22:22'),(4,'sessions','0001_initial','2014-11-06 21:22:22'),(5,'stats','0001_initial','2014-11-06 21:22:27'),(6,'stats','0002_auto_20141106_1156','2014-11-06 21:56:58'),(7,'stats','0003_auto_20141106_1200','2014-11-06 22:00:48'),(8,'stats','0004_auto_20141106_2156','2014-11-07 07:56:39'),(9,'stats','0005_auto_20141106_2156','2014-11-07 07:56:39'),(10,'stats','0006_auto_20141107_1514','2014-11-08 01:14:51'),(11,'stats','0007_auto_20141107_2222','2014-11-08 08:22:23'),(12,'stats','0008_suspension_season','2014-11-08 18:02:19'),(13,'stats','0009_auto_20141108_0918','2014-11-08 19:18:19'),(14,'stats','0010_auto_20141108_1955','2014-11-09 05:55:59'),(15,'stats','0011_auto_20141108_2112','2014-11-09 07:12:47'),(16,'stats','0012_matchday_end_date','2014-11-09 07:18:52'),(17,'stats','0013_remove_matchday_end_date','2014-11-09 07:22:09'),(18,'stats','0014_auto_20141109_0849','2014-11-09 18:49:31'),(19,'stats','0015_auto_20141109_0911','2014-11-09 19:11:31'),(20,'stats','0016_remove_suspension_number_games','2014-11-09 19:37:28'),(21,'stats','0017_auto_20141109_1033','2014-11-09 20:33:54'),(22,'stats','0018_auto_20141109_1106','2014-11-09 21:06:44'),(23,'stats','0019_auto_20141109_1207','2014-11-09 22:07:41'),(24,'stats','0020_auto_20141109_1220','2014-11-09 22:20:49'),(25,'stats','0021_auto_20141111_1831','2014-11-12 04:34:31');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1298,11 +1298,11 @@ CREATE TABLE `stats_game` (
   KEY `stats_game_9f35f176` (`matchday_id`),
   KEY `stats_game_efa3f36d` (`next_game_id`),
   KEY `stats_game_3cf09080` (`referee_id`),
+  CONSTRAINT `stats_game_next_game_id_34a322f8184d117f_fk_stats_game_id` FOREIGN KEY (`next_game_id`) REFERENCES `stats_game` (`id`),
   CONSTRAINT `stats_game_away_team_id_30e966ad7cee71e1_fk_stats_team_id` FOREIGN KEY (`away_team_id`) REFERENCES `stats_team` (`id`),
   CONSTRAINT `stats_game_field_id_7864b5a2584fd2b1_fk_stats_field_id` FOREIGN KEY (`field_id`) REFERENCES `stats_field` (`id`),
   CONSTRAINT `stats_game_home_team_id_7bfd9c06946665f0_fk_stats_team_id` FOREIGN KEY (`home_team_id`) REFERENCES `stats_team` (`id`),
   CONSTRAINT `stats_game_matchday_id_5f0d938ee1a8ad49_fk_stats_matchday_id` FOREIGN KEY (`matchday_id`) REFERENCES `stats_matchday` (`id`),
-  CONSTRAINT `stats_game_next_game_id_34a322f8184d117f_fk_stats_game_id` FOREIGN KEY (`next_game_id`) REFERENCES `stats_game` (`id`),
   CONSTRAINT `stats_game_referee_id_796ef95bea597d9_fk_stats_referee_id` FOREIGN KEY (`referee_id`) REFERENCES `stats_referee` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1328,17 +1328,18 @@ CREATE TABLE `stats_goal` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `minute` smallint(6),
   `assisted_by_id` int(11),
-  `scored_by_id` int(11) NOT NULL,
+  `scored_by_id` int(11),
   `scored_for_id` int(11) NOT NULL,
   `game_id` int(11),
+  `own_goal` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `stats_goal_fbf76cfd` (`assisted_by_id`),
   KEY `stats_goal_75a7163c` (`scored_by_id`),
   KEY `stats_goal_cb446227` (`scored_for_id`),
   KEY `stats_goal_8e9c7365` (`game_id`),
+  CONSTRAINT `stats_goal_scored_by_id_2dca7b348d791a96_fk_stats_player_id` FOREIGN KEY (`scored_by_id`) REFERENCES `stats_player` (`id`),
   CONSTRAINT `stats_goal_assisted_by_id_7b7a804a2bc4ff80_fk_stats_player_id` FOREIGN KEY (`assisted_by_id`) REFERENCES `stats_player` (`id`),
   CONSTRAINT `stats_goal_game_id_367e61e90c154db9_fk_stats_game_id` FOREIGN KEY (`game_id`) REFERENCES `stats_game` (`id`),
-  CONSTRAINT `stats_goal_scored_by_id_2dca7b348d791a96_fk_stats_player_id` FOREIGN KEY (`scored_by_id`) REFERENCES `stats_player` (`id`),
   CONSTRAINT `stats_goal_scored_for_id_db647aa03f2e9c7_fk_stats_team_id` FOREIGN KEY (`scored_for_id`) REFERENCES `stats_team` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1349,7 +1350,7 @@ CREATE TABLE `stats_goal` (
 
 LOCK TABLES `stats_goal` WRITE;
 /*!40000 ALTER TABLE `stats_goal` DISABLE KEYS */;
-INSERT INTO `stats_goal` VALUES (3,NULL,NULL,1,1,1),(4,NULL,NULL,1,1,3),(5,NULL,NULL,1,2,1),(6,NULL,NULL,1,1,3),(7,NULL,NULL,1,1,1),(8,NULL,NULL,2,1,2);
+INSERT INTO `stats_goal` VALUES (3,NULL,NULL,1,1,1,0),(4,NULL,NULL,1,1,3,0),(5,NULL,NULL,1,2,1,0),(6,NULL,NULL,1,1,3,0),(7,NULL,NULL,1,1,1,0),(8,NULL,NULL,2,1,2,0);
 /*!40000 ALTER TABLE `stats_goal` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1642,4 +1643,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-11-10 19:37:54
+-- Dump completed on 2014-11-11 19:17:08
