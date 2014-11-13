@@ -147,3 +147,45 @@ class StandingsTemplateView(TemplateView):
             team.num_points = team.num_draws + team.num_wins * 3
 
         return sorted(teams, key=lambda team: team.num_points, reverse=True)
+
+
+class DisciplinaryListView(ListView):
+
+    model = PlayFor
+    context_object_name = 'playfor_list'
+    template_name = 'stats/disciplinary.html'
+    season = None
+
+    def get_queryset(self, **kwargs):
+
+        self.season = Season.get_season_by_slugs(
+            self.kwargs['classification'],
+            self.kwargs['competition'],
+            self.kwargs['season']
+        )
+
+        return self.order_by_cards(
+            self.season.get_carded_playfors(),
+            self.season
+        )
+
+    def get_context_data(self, **kwargs):
+
+        context = super(DisciplinaryListView, self).get_context_data(**kwargs)
+        context['season'] = self.season
+
+        return context
+
+    @staticmethod
+    def order_by_cards(playfors, season):
+
+        for playfor in playfors:
+
+            playfor.num_yellow_cards = playfor.player.get_num_of_yellow_cards_per(season)
+            playfor.num_red_cards = playfor.player.get_num_of_red_cards_per(season)
+
+        return sorted(
+            playfors,
+            key=lambda x: (x.num_red_cards, x.num_yellow_cards),
+            reverse=True
+        )

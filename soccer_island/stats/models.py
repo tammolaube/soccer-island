@@ -232,6 +232,22 @@ class Player(models.Model):
             date_received__lt=datetime.date.today
         )
 
+    def get_num_of_yellow_cards_per(self, season):
+
+        return Card.objects.filter(
+            play_for__player=self,
+            in_game__matchday__season=season,
+            color='Y',
+        ).count()
+
+    def get_num_of_red_cards_per(self, season):
+
+        return Card.objects.filter(
+            play_for__player=self,
+            in_game__matchday__season=season,
+            color='R',
+        ).count()
+
 
 class Coach(models.Model):
 
@@ -322,7 +338,7 @@ class Competition(models.Model):
 
     def __unicode__(self):
 
-        return self.classification.__unicode__() + ' ' + self.name
+        return '{0} ({1})'.format(self.name, self.classification.__unicode__())
 
     def save(self, *args, **kwargs):
 
@@ -396,9 +412,29 @@ class Season(models.Model):
         return Player.objects.filter(goal_scored_by__in=self.get_goals().
             filter(own_goal=False))
 
+    def get_carded_playfors(self):
+
+        return PlayFor.objects.filter(
+            card__in_game__matchday__season=self,
+        ).distinct()
+
+    def get_yellow_carded_playfors(self):
+
+        return PlayFor.objects.filter(
+            card__in_game__matchday__season=self,
+            card__color='Y',
+        ).distinct()
+
+    def get_red_carded_playfors(self):
+
+        return PlayFor.objects.filter(
+            card__in_game__matchday__season=self,
+            card__color='R',
+        ).distinct()
+
     def __unicode__(self):
 
-        return self.competition.__unicode__() + ' - ' + self.label
+        return '{1} {0}'.format(self.competition.__unicode__(), self.label)
 
     def save(self, *args, **kwargs):
 
@@ -431,13 +467,13 @@ class Goal(models.Model):
 
     minute = models.SmallIntegerField(blank=True, null=True)
     scored_by = models.ForeignKey(
-        Player,
+        PlayFor,
         related_name='goal_scored_by',
         blank=True,
         null=True
     )
     assisted_by = models.ForeignKey(
-        Player,
+        PlayFor,
         related_name='goal_assisted_by',
         null=True,
         blank=True
@@ -537,8 +573,8 @@ class Card(models.Model):
             ('R', 'Red'),
         )
     color = models.CharField(max_length=1, choices=COLOR_CHOICES, null=False)
-    received_by = models.ForeignKey(Player)
-    received_in = models.ForeignKey(Game)
+    play_for = models.ForeignKey(PlayFor)
+    in_game = models.ForeignKey(Game)
 
     def __unicode__(self):
 

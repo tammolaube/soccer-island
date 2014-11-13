@@ -20,4 +20,8 @@ urlpatterns = patterns('',
         views.MatchdayListView.as_view(),
         name='matchdays'
     ),
+    url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/disciplinary/$',
+        views.DisciplinaryListView.as_view(),
+        name='disciplinary'
+    ),
 )

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Disciplinary - {{ season }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Disciplinary <small>{{ season }}</small></h1>
+</div>
+<table class="table">
+  <tr><th>Player</th><th>Yellow Cards</th><th>Red Cards</th><th>Team</th></tr>
+    {% for playfor in playfor_list %}
+    <tr><td>{{ playfor.player }}</td><td>{{ playfor.num_yellow_cards }}</td><td>{{ playfor.num_red_cards }}</td><td>{{ playfor.team }}</td></tr>
+    {% endfor%}
+</table>
+{% endblock %}
