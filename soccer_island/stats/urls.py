@@ -24,4 +24,8 @@ urlpatterns = patterns('',
         views.DisciplinaryListView.as_view(),
         name='disciplinary'
     ),
+    url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/goals/$',
+        views.GoalsListView.as_view(),
+        name='goals'
+    ),
 )

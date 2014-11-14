@@ -9,7 +9,7 @@
 
   <ul>
     {% for team in standings %}
-      <li>{{ team.name }} {{ team.num_games }} {{ team.num_wins }} {{ team.num_draws }} {{ team.num_losses }} {{ team.num_scored_goals }} {{ team.num_conceded_goals }} {{ team.num_points}} </li>
+      <li>{{ team.name }} {{ team.num_games }} {{ team.num_wins }} {{ team.num_draws }} {{ team.num_losses }} {{ team.goal_diff }} {{ team.num_scored_goals }} {{ team.num_conceded_goals }} {{ team.num_points}} </li>
     {% endfor %}
   </ul>
 

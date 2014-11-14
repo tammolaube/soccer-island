@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django.db.models import Count, Q
 from django.core.validators import RegexValidator
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
@@ -140,6 +141,22 @@ class PlayFor(models.Model):
         ]
     )
 
+    def count_yellow_cards_per(self, season):
+
+        return Card.objects.filter(
+            play_for=self,
+            in_game__matchday__season=season,
+            color='Y',
+        ).count()
+
+    def count_red_cards_per(self, season):
+
+        return Card.objects.filter(
+            play_for=self,
+            in_game__matchday__season=season,
+            color='R',
+        ).count()
+
     def __unicode__(self):
 
         return self.player.__unicode__() + ' at ' + self.team.__unicode__()
@@ -224,6 +241,12 @@ class Player(models.Model):
 
         return self.person.__unicode__()
 
+    def teams_per(self, season):
+
+        return Team.objects.filter(
+            season=season,
+            playfor__player=self)
+
     def current_suspensions(self):
 
         return Suspension.objects.filter(
@@ -232,21 +255,6 @@ class Player(models.Model):
             date_received__lt=datetime.date.today
         )
 
-    def get_num_of_yellow_cards_per(self, season):
-
-        return Card.objects.filter(
-            play_for__player=self,
-            in_game__matchday__season=season,
-            color='Y',
-        ).count()
-
-    def get_num_of_red_cards_per(self, season):
-
-        return Card.objects.filter(
-            play_for__player=self,
-            in_game__matchday__season=season,
-            color='R',
-        ).count()
 
 
 class Coach(models.Model):
@@ -374,22 +382,14 @@ class Season(models.Model):
         Slugs for classification, competition and season are
         unique. So we can use .get() instead of .filter().
         """
-        classification_obj = get_object_or_404(
-            Classification,
-            slug=classification
-        )
-        competition_obj = get_object_or_404(
-            Competition,
-            classification=classification_obj,
-            slug=competition
-        )
-        season_obj = get_object_or_404(
-            Season,
-            competition=competition_obj,
+        season = get_object_or_404(
+            Season.objects.select_related('competition__classification'),
+            competition__slug=competition,
+            competition__classification__slug=classification,
             slug=season
         )
 
-        return season_obj
+        return season
 
     def get_teams(self):
 
@@ -407,30 +407,63 @@ class Season(models.Model):
 
         return self.get_goals().count()
 
-    def get_goal_scorers(self):
+    def scorers(self):
 
-        return Player.objects.filter(goal_scored_by__in=self.get_goals().
-            filter(own_goal=False))
+        return Player.objects.filter(
+                playfor__goal_scored_by__game__matchday__season=self,
+                playfor__goal_scored_by__own_goal=False,
+            ).annotate(
+                num_scored=Count('playfor__goal_scored_by')
+            ).order_by(
+                '-num_scored',
+            )
 
-    def get_carded_playfors(self):
+    def assistants(self):
+
+        return Player.objects.filter(
+                playfor__goal_assisted_by__game__matchday__season=self,
+                playfor__goal_assisted_by__own_goal=False,
+            ).annotate(
+                num_assisted=Count('playfor__goal_assisted_by'),
+            ).order_by(
+                '-num_assisted'
+            )
+
+    def scorers_assistants(self):
+
+        return Player.objects.filter(
+                Q(playfor__goal_scored_by__game__matchday__season=self) |\
+                Q(playfor__goal_assisted_by__game__matchday__season=self),
+                playfor__goal_scored_by__own_goal=False,
+            ).annotate(
+                num_scored=Count('playfor__goal_scored_by'),
+                num_assisted=Count('playfor__goal_assisted_by'),
+            ).order_by(
+                '-num_scored',
+                '-num_assisted'
+            )
+
+    def booked_playfors(self):
 
         return PlayFor.objects.filter(
-            card__in_game__matchday__season=self,
-        ).distinct()
+              card__in_game__matchday__season=self,
+          ).annotate(
+              num_of_cards=Count('card')
+          )
 
-    def get_yellow_carded_playfors(self):
-
-        return PlayFor.objects.filter(
-            card__in_game__matchday__season=self,
-            card__color='Y',
-        ).distinct()
-
-    def get_red_carded_playfors(self):
+    def yellow_booked_playfors(self):
 
         return PlayFor.objects.filter(
-            card__in_game__matchday__season=self,
-            card__color='R',
-        ).distinct()
+              card__in_game__matchday__season=self,
+              card__color='Y'
+          ).annotate(num_of_cards=Count('card'))
+
+    def red_booked_playfors(self):
+
+        return PlayFor.objects.filter(
+              card__in_game__matchday__season=self,
+              card__color='R'
+          ).annotate(num_of_cards=Count('card'))
 
     def __unicode__(self):
 
@@ -479,7 +512,7 @@ class Goal(models.Model):
         blank=True
     )
     scored_for = models.ForeignKey(Team, related_name='goal_scored_for')
-    game = models.ForeignKey('Game')
+    game = models.ForeignKey('Game', related_name='goals')
     own_goal = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -492,15 +525,15 @@ class Game(models.Model):
     date = models.DateTimeField()
     away_team = models.ForeignKey(
         Team,
-        related_name='game_away_team'
+        related_name='away'
     )
     home_team = models.ForeignKey(
         Team,
-        related_name='game_home_team'
+        related_name='home'
     )
     referee = models.ForeignKey(Referee)
     field = models.ForeignKey(Field)
-    matchday = models.ForeignKey(Matchday)
+    matchday = models.ForeignKey(Matchday, related_name='games')
     played = models.BooleanField(
         default=False,
         help_text='Set this to true after the game has been played and all \

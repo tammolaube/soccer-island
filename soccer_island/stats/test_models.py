@@ -98,47 +98,64 @@ class SeasonTest(TestCase):
             played=True, field=self.field)
         self.game_season_2.save()
 
+    def test_player_season(self):
+
+        # add team to season
+        self.season_1.enrolled.add(self.team_1)
+
+        self.assertItemsEqual((self.team_1,), self.player_1.teams_per(self.season_1))
 
     def test_goals_by_season(self):
 
-        goal_1 = Goal(scored_by=self.player_1, scored_for=self.team_1, game=self.game_season_1)
+        # 2 goals in season 1 by player 1
+        goal_1 = Goal(scored_by=self.playfor_1, scored_for=self.team_1,
+            game=self.game_season_1)
         goal_1.save()
-        self.assertEqual(1, self.season_1.count_goals())
-        self.assertIn(self.player_1, self.season_1.get_goal_scorers())
-
-        goal_2 = Goal(scored_by=self.player_1, scored_for=self.team_1, game=self.game_season_1)
+        goal_2 = Goal(scored_by=self.playfor_1, scored_for=self.team_1,
+            game=self.game_season_1)
         goal_2.save()
-        self.assertEqual(2, self.season_1.count_goals())
-        self.assertIn(self.player_1, self.season_1.get_goal_scorers())
-
-        goal_3 = Goal(scored_by=self.player_2, scored_for=self.team_1, game=self.game_season_2)
+        # 1 goal in season 2 by player 2
+        goal_3 = Goal(scored_by=self.playfor_2, scored_for=self.team_1,
+            game=self.game_season_2)
         goal_3.save()
-        self.assertEqual(2, self.season_1.count_goals())
-        self.assertNotIn(self.player_2, self.season_1.get_goal_scorers())
-        self.assertIn(self.player_2, self.season_2.get_goal_scorers())
-
-        goal_4 = Goal(scored_by=self.player_3, scored_for=self.team_1, game=self.game_season_1, own_goal=True)
+        # 1 own goal in season 1 by player 3
+        goal_4 = Goal(scored_by=self.playfor_3,
+            scored_for=self.team_1, game=self.game_season_1, own_goal=True)
         goal_4.save()
+
+        self.assertIn(self.player_1, self.season_1.scorers())
+        self.assertNotIn(self.player_2, self.season_1.scorers())
+        self.assertNotIn(self.player_3, self.season_1.scorers())
         self.assertEqual(3, self.season_1.count_goals())
-        self.assertNotIn(self.player_3, self.season_1.get_goal_scorers())
+        self.assertEqual(2, self.season_1.scorers()[0].num_scored)
 
-    def test_carded_players_of_season(self):
+    def test_disciplinary(self):
 
-        yellow_card_1 = Card(color='Y', play_for=self.playfor_1, in_game=self.game_season_1)
+        yellow_card_1 = Card(color='Y', play_for=self.playfor_1,
+            in_game=self.game_season_1)
         yellow_card_1.save()
-        self.assertIn(self.playfor_1, self.season_1.get_yellow_carded_playfors())
-        self.assertNotIn(self.playfor_2, self.season_1.get_yellow_carded_playfors())
-        red_card_1 = Card(color='R', play_for=self.playfor_3, in_game=self.game_season_1)
-        red_card_1.save()
-        self.assertNotIn(self.playfor_3, self.season_1.get_yellow_carded_playfors())
-        self.assertIn(self.playfor_3, self.season_1.get_red_carded_playfors())
-
-        yellow_card_2 = Card(color='Y', play_for=self.playfor_1, in_game=self.game_season_1)
+        yellow_card_2 = Card(color='Y', play_for=self.playfor_1,
+            in_game=self.game_season_1)
         yellow_card_2.save()
-        yellow_card_3 = Card(color='Y', play_for=self.playfor_2, in_game=self.game_season_1)
+        yellow_card_3 = Card(color='Y', play_for=self.playfor_1,
+            in_game=self.game_season_2)
         yellow_card_3.save()
-        yellow_card_4 = Card(color='Y', play_for=self.playfor_1, in_game=self.game_season_2)
-        yellow_card_4.save()
+        red_card_1 = Card(color='R', play_for=self.playfor_3,
+            in_game=self.game_season_1)
+        red_card_1.save()
 
-        num_of_yellows = self.player_1.get_num_of_yellow_cards_per(self.season_1)
+        self.assertItemsEqual((self.playfor_1, self.playfor_3),
+            self.season_1.booked_playfors())
+        self.assertEqual(2,
+            self.season_1.booked_playfors()[0].num_of_cards)
+        self.assertEqual(2,
+            self.season_1.yellow_booked_playfors()[0].num_of_cards)
+        self.assertItemsEqual((self.playfor_3,),
+            self.season_1.red_booked_playfors())
+        self.assertEqual(1,
+            self.season_1.red_booked_playfors()[0].num_of_cards)
+
+
+        num_of_yellows = self.\
+            playfor_1.count_yellow_cards_per(self.season_1)
         self.assertEqual(num_of_yellows, 2)

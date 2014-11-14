@@ -3,11 +3,13 @@ import datetime
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django.shortcuts import get_object_or_404
-from django.db.models import F, Q
+from django.db.models import F, Q, Prefetch
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
+from django.db import connection
 
 from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor, Matchday, Game, Goal
+
 
 class RosterTemplateView(TemplateView):
 
@@ -100,53 +102,70 @@ class StandingsTemplateView(TemplateView):
             self.kwargs['season']
         )
         teams = season.get_teams()
-        games_played = season.get_games_played()
 
         context = super(StandingsTemplateView, self).get_context_data(**kwargs)
 
         context['season'] = season
-        context['standings'] = self.calculate_standings(teams, games_played)
+        context['standings'] = self.calculate_standings(teams)
         context['matchdays'] = Matchday.objects.filter(
             season=season,
             date__gt=(datetime.date.today() - datetime.timedelta(days=7))
-        ).order_by('date')[:2]
+        ).order_by('date').prefetch_related('games')[:2]
 
         return context
 
     @staticmethod
-    def calculate_standings(teams, games_played):
+    def calculate_standings(teams):
+
+        teams = teams.prefetch_related(
+            Prefetch('home__goals__scored_for'),
+            Prefetch('away__goals__scored_for')
+        )
 
         for team in teams:
 
-            games_of_team = games_played.filter(
-                Q(home_team=team) | Q(away_team=team)
-            )
-            team.num_games = games_of_team.count()
+            team.num_games = 0
             team.num_wins = 0
             team.num_draws = 0
             team.num_losses = 0
             team.num_scored_goals = 0
             team.num_conceded_goals = 0
+            team.goal_diff = 0
 
-            for game in games_of_team:
+            for game in list(team.home.all()) + list(team.away.all()):
 
-                if game.get_winner() == team:
+                if not game.played:
+                    continue
+
+                team.num_games += 1
+
+                scored_goals = 0
+                conceded_goals = 0
+
+                for goal in game.goals.all():
+
+                    if goal.scored_for == team:
+                        scored_goals += 1
+                    else:
+                        conceded_goals += 1
+
+                team.num_scored_goals += scored_goals
+                team.num_conceded_goals += conceded_goals
+
+                if scored_goals > conceded_goals:
                     team.num_wins += 1
-                elif game.get_winner() == None:
+                elif scored_goals == conceded_goals:
                     team.num_draws += 1
                 else:
                     team.num_losses += 1
 
-                if team == game.home_team:
-                    team.num_scored_goals += game.get_home_goals().count()
-                    team.num_conceded_goals += game.get_away_goals().count()
-                else:
-                    team.num_scored_goals += game.get_away_goals().count()
-                    team.num_conceded_goals += game.get_home_goals().count()
-
             team.num_points = team.num_draws + team.num_wins * 3
+            team.goal_diff = team.num_scored_goals - team.num_conceded_goals
 
-        return sorted(teams, key=lambda team: team.num_points, reverse=True)
+        return sorted(teams, key=lambda team:
+            (team.num_points, team.goal_diff, team.num_scored_goals),
+            reverse=True
+        )
 
 
 class DisciplinaryListView(ListView):
@@ -165,7 +184,7 @@ class DisciplinaryListView(ListView):
         )
 
         return self.order_by_cards(
-            self.season.get_carded_playfors(),
+            self.season.booked_playfors(),
             self.season
         )
 
@@ -181,11 +200,44 @@ class DisciplinaryListView(ListView):
 
         for playfor in playfors:
 
-            playfor.num_yellow_cards = playfor.player.get_num_of_yellow_cards_per(season)
-            playfor.num_red_cards = playfor.player.get_num_of_red_cards_per(season)
+            playfor.num_yellow_cards =\
+                playfor.count_yellow_cards_per(season)
+            playfor.num_red_cards =\
+                playfor.count_red_cards_per(season)
 
         return sorted(
             playfors,
             key=lambda x: (x.num_red_cards, x.num_yellow_cards),
             reverse=True
         )
+
+class GoalsListView(TemplateView):
+
+    template_name = 'stats/goals.html'
+
+    def get_context_data(self, **kwargs):
+
+        season = Season.get_season_by_slugs(
+            self.kwargs['classification'],
+            self.kwargs['competition'],
+            self.kwargs['season']
+        )
+
+        context = super(GoalsListView, self).get_context_data(**kwargs)
+        context['season'] = season
+        context['scorers'] = self.annotate_teams(season.scorers(), season)
+        context['assistants'] = self.annotate_teams(season.assistants(), season)
+
+        return context
+
+    @staticmethod
+    def annotate_teams(players, season):
+
+        players = players.prefetch_related(
+            Prefetch('registered',
+                queryset=Team.objects.filter(season=season),
+                to_attr='teams'
+            )
+        )
+
+        return players
