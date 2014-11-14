@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Goals - {{ season }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Goals <small>{{ season }}</small></h1>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <h3>Leading Scorers</h3>
+    <table class="table">
+      <tr>
+        <th class="col-md-5">Player</th>
+        <th class="col-md-5">Team</th>
+        <th class="col-md-2">Goals</th>
+      </tr>
+      {% for player in scorers %}
+      <tr>
+        <td class="col-md-5">{{ player }}</td>
+        <td class="col-md-5">{{ player.teams|join:', ' }}</td>
+        <td class="col-md-2">{{ player.num_scored }}</td>
+      </tr>
+      {% endfor%}
+    </table>
+  </div>
+  <div class="col-md-6">
+    <h3>Assist Leaders</h3>
+    <table class="table">
+      <tr>
+        <th class="col-md-5">Player</th>
+        <th class="col-md-5">Team</th>
+        <th class="col-md-2">Assists</th>
+      </tr>
+      {% for player in assistants %}
+      <tr>
+        <td class="col-md-5">{{ player }}</td>
+        <td class="col-md-5">{{ player.teams|join:', ' }}</td>
+        <td class="col-md-2">{{ player.num_assisted }}</td>
+      </tr>
+      {% endfor%}
+    </table>
+  </div>
+</div>
+{% endblock %}
