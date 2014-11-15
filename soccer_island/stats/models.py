@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from django.db.models import Count, Q
+from django.db.models import Count, Q, F, Prefetch
 from django.core.validators import RegexValidator
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
@@ -395,6 +395,81 @@ class Season(models.Model):
 
         return Team.objects.filter(season=self)
 
+    def standings(self):
+
+        '''
+        At the moment I get each teams home and away games.
+        So I get each game, it's goals and who the goals where
+        scored for twice.
+        This can be improved but I'm not sure that the code will stay
+        as readable.
+        '''
+        teams = Team.objects.filter(season=self).prefetch_related(
+            Prefetch('home__goals__scored_for'),
+            Prefetch('away__goals__scored_for')
+        )
+
+        for team in teams:
+
+            team.num_games = 0
+            team.num_wins = 0
+            team.num_draws = 0
+            team.num_losses = 0
+            team.num_scored_goals = 0
+            team.num_conceded_goals = 0
+            team.goal_diff = 0
+
+            for game in list(team.home.all()) + list(team.away.all()):
+
+                if not game.played:
+                    continue
+
+                team.num_games += 1
+
+                scored_goals = 0
+                conceded_goals = 0
+
+                for goal in game.goals.all():
+
+                    if goal.scored_for == team:
+                        scored_goals += 1
+                    else:
+                        conceded_goals += 1
+
+                team.num_scored_goals += scored_goals
+                team.num_conceded_goals += conceded_goals
+
+                if scored_goals > conceded_goals:
+                    team.num_wins += 1
+                elif scored_goals == conceded_goals:
+                    team.num_draws += 1
+                else:
+                    team.num_losses += 1
+
+            team.num_points = team.num_draws + team.num_wins * 3
+            team.goal_diff = team.num_scored_goals - team.num_conceded_goals
+
+        return sorted(teams, key=lambda team:
+            (team.num_points, team.goal_diff, team.num_scored_goals),
+            reverse=True
+        )
+
+    def last_and_next_matchdays(self):
+
+        last_matchday = Matchday.objects.filter(
+            season=self,
+            date__lt=(datetime.date.today())
+        ).order_by('-date').\
+            prefetch_related('games__home_team', 'games__away_team', 'games__field')[:1][0]
+
+        next_matchday = Matchday.objects.filter(
+            season=self,
+            date__gte=(datetime.date.today())
+        ).order_by('date').\
+            prefetch_related('games__home_team', 'games__away_team', 'games__field')[:1][0]
+
+        return (last_matchday, next_matchday,)
+
     def get_games_played(self):
 
         return Game.objects.filter(matchday__season=self).filter(played=True)
@@ -428,6 +503,17 @@ class Season(models.Model):
             ).order_by(
                 '-num_assisted'
             )
+
+    def with_teams(self, players):
+
+        players = players.prefetch_related(
+            Prefetch('registered',
+                queryset=Team.objects.filter(season=self),
+                to_attr='teams'
+            )
+        )
+
+        return players
 
     def scorers_assistants(self):
 

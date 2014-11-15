@@ -2,7 +2,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">{{ matchday }}<span><span class="label label-default">{{ matchday.date }}</span></span></div>
     <table class="table table-condensed">
-      {% for game in matchday.game_set.all %}
+      {% for game in matchday.games.all %}
       <tr class="game-score">
         <td class="col-md-5 text-center text-nowrap">{{ game.home_team }}</td>
         <td class="col-md-2 text-center text-nowrap">{{ game.get_score }}</td>
