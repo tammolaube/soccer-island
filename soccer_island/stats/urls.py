@@ -9,8 +9,8 @@ urlpatterns = patterns('',
         name='home'
     ),
     url(r'^team/(?P<team>.*)/$',
-        views.RosterTemplateView.as_view(),
-        name='roster'
+        views.TeamTemplateView.as_view(),
+        name='team'
     ),
     url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/$',
         views.StandingsTemplateView.as_view(),

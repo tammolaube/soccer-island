@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.db.models import Count, Q, F, Prefetch
+from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
@@ -197,6 +198,10 @@ class Team(models.Model):
         ).exclude(
             to_date__lt=datetime.date.today()
         )
+
+    def url(self):
+
+        return reverse('team', args=(self.slug,))
 
     def __unicode__(self):
 

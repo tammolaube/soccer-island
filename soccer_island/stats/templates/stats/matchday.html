@@ -4,9 +4,15 @@
     <table class="table table-condensed">
       {% for game in matchday.games.all %}
       <tr class="game-score">
-        <td class="col-md-5 text-center text-nowrap">{{ game.home_team }}</td>
-        <td class="col-md-2 text-center text-nowrap">{{ game.get_score }}</td>
-        <td class="col-md-5 text-center text-nowrap">{{ game.away_team }}</td>
+        <td class="col-md-5 text-center text-nowrap">
+          <a href="{{ game.home_team.url }}">{{ game.home_team }}</a>
+        </td>
+        <td class="col-md-2 text-center text-nowrap">
+          {{ game.get_score }}
+        </td>
+        <td class="col-md-5 text-center text-nowrap">
+          <a href="{{ game.away_team.url }}">{{ game.away_team }}</a>
+        </td>
       </tr>
       <tr class="game-field">
         <td colspan="3" class="text-center text-nowrap col-md-12"><small>{{ game.date }} <br/> {{ game.field }}</small></td>

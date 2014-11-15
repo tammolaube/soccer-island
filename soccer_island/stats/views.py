@@ -11,15 +11,15 @@ from django.db import connection
 from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor, Matchday, Game, Goal
 
 
-class RosterTemplateView(TemplateView):
+class TeamTemplateView(TemplateView):
 
-    template_name = 'stats/roster.html'
+    template_name = 'stats/team.html'
 
     def get_context_data(self, **kwargs):
 
         team = get_object_or_404(Team, slug=self.kwargs['team'])
 
-        context = super(RosterTemplateView, self).get_context_data(**kwargs)
+        context = super(TeamTemplateView, self).get_context_data(**kwargs)
         context['team'] = team
         context['current_playfors'] = self.sort_playfors(
             team.get_current_playfors()
