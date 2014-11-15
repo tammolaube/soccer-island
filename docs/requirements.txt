@@ -2,5 +2,7 @@ Django==1.7
 MySQL-python==1.2.5
 Pillow==2.6.1
 argparse==1.2.1
+django-debug-toolbar==1.2.2
 jedi==0.8.1-final0
+sqlparse==0.1.13
 wsgiref==0.1.2
