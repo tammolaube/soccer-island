@@ -1,20 +1,83 @@
 {% extends "base.html" %}
-
 {% block title %}Standings - {{ season }}{% endblock %}
-
 {% block content %}
-  <div class="page-header">
-    <h1>Standings <small>{{ season }}</small></h1>
-  </div>
-
-  <ul>
+<div class="page-header">
+  <h1>Standings <small>{{ season }}</small></h1>
+</div>
+<div class="row">
+<div class="col-md-8">
+  <table class="table table-striped">
+    <tr>
+      <th>#</th>
+      <th>Team</th>
+      <th>GP</th>
+      <th>W</th>
+      <th>T</th>
+      <th>L</th>
+      <th>G</th>
+      <th>A</th>
+      <th>Diff</th>
+      <th>P</th>
+    </tr>
     {% for team in standings %}
-      <li>{{ team.name }} {{ team.num_games }} {{ team.num_wins }} {{ team.num_draws }} {{ team.num_losses }} {{ team.goal_diff }} {{ team.num_scored_goals }} {{ team.num_conceded_goals }} {{ team.num_points}} </li>
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td><a href="{{ team.url }}">{{ team.name }}</a></td>
+      <td>{{ team.num_games }}</td>
+      <td>{{ team.num_wins }}</td>
+      <td>{{ team.num_draws }}</td>
+      <td>{{ team.num_losses }}</td>
+      <td>{{ team.goal_diff }}</td>
+      <td>{{ team.num_scored_goals }}</td>
+      <td>{{ team.num_conceded_goals }}</td>
+      <td>{{ team.num_points}}</td>
+    </tr>
     {% endfor %}
-  </ul>
-
-  {% for matchday in matchdays %}
-    {% include 'stats/matchday.html' %}
-  {% endfor %}
-
+  </table>
+  <div class="row">
+    <div class="col-md-6">
+      <h4 class="heading">Top Scorers</h4>
+      <table class="table table-striped">
+        <tr>
+          <th>#</th>
+          <th>Team</th>
+          <th># Goals</th>
+        </tr>
+        <tr>
+          <td>Ronaldo</td>
+          <td>B</td>
+          <td>3</td>
+        </tr>
+        <tr>
+          <td>Messi</td>
+          <td>...</td>
+          <td>2</td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <h4 class="heading">Top Assist Givers</h4>
+      <table class="table table-striped">
+        <tr>
+          <th>#</th>
+          <th>Team</th>
+          <th># Assists</th>
+        </tr>
+        <tr>
+          <td>Giggs</td>
+          <td>...</td>
+          <td>4</td>
+        </tr>
+        <tr>
+          <td>Laudrup</td>
+          <td>...</td>
+          <td>1</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+{% for matchday in matchdays %}
+{% include 'stats/matchday.html' %}
+{% endfor %}
 {% endblock %}
