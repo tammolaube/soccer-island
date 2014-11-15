@@ -1,0 +1,21 @@
+
+<div class="col-md-6">
+<h3>Leading Scorers</h3>
+<table class="table">
+    <tr>
+    <th class="col-md-5">Player</th>
+    <th class="col-md-5">Team</th>
+    <th class="col-md-2">Goals</th>
+    </tr>
+    {% for player in scorers %}
+    <tr>
+    <td class="col-md-5">{{ player }}</td>
+    <td class="col-md-5">
+        {% for team in player.teams %}
+        <a href="{{ team.url }}">{{ team }}</a><br/>
+        {% endfor %}
+    <td class="col-md-2">{{ player.num_scored }}</td>
+    </tr>
+    {% endfor%}
+</table>
+</div>

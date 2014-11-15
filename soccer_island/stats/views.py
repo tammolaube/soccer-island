@@ -108,6 +108,8 @@ class StandingsTemplateView(TemplateView):
         context['season'] = season
         context['standings'] = season.standings()
         context['matchdays'] = season.last_and_next_matchdays()
+        context['scorers'] = season.with_teams(season.scorers())[:5]
+        context['assistants'] = season.with_teams(season.assistants())[:5]
 
         return context
 
