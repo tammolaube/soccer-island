@@ -12,6 +12,14 @@ urlpatterns = patterns('',
         views.TeamTemplateView.as_view(),
         name='team'
     ),
+    url(r'^game/(?P<pk>\d+)/$',
+        views.GameDetailView.as_view(),
+        name='game'
+    ),
+    url(r'^game/(?P<pk>\d+)/update/$',
+        views.GameUpdateView,
+        name='game_update'
+    ),
     url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/$',
         views.StandingsTemplateView.as_view(),
         name='standings'

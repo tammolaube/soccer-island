@@ -1,14 +1,15 @@
 import datetime
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response, render
 from django.db.models import F, Q, Prefetch
-from django.views.generic import TemplateView
-from django.views.generic.list import ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.db import connection
 
 from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor, Matchday, Game, Goal
+from stats.forms import GameUpdateForm, GoalInlineFormSet
+from django.forms.models import inlineformset_factory
 
 
 class TeamTemplateView(TemplateView):
@@ -90,6 +91,35 @@ class MatchdayListView(ListView):
         context['season'] = self.season
 
         return context
+
+
+class GameDetailView(DetailView):
+
+    model = Game
+    contex_object_name = 'game'
+    template_name = 'stats/game.html'
+
+
+def GameUpdateView(request, pk):
+
+    game = get_object_or_404(Game, pk=pk)
+    GoalFormSet = inlineformset_factory(Game, Goal, formset=GoalInlineFormSet, extra=1)
+
+    if request.method == 'POST':
+        form = GameUpdateForm(request.POST, instance=game)
+        goal_formset = GoalFormSet(request.POST, instance=game)
+        if form.is_valid() and goal_formset.is_valid():
+            form.save()
+            goal_formset.save()
+            return HttpResponseRedirect(game.get_absolute_url())
+
+    else:
+        form = GameUpdateForm(instance=game)
+        goal_formset = GoalFormSet(instance=game)
+
+    context = {'form': form, 'goal_formset': goal_formset, 'game': game}
+
+    return render(request, 'stats/game_update.html', context)
 
 
 class StandingsTemplateView(TemplateView):

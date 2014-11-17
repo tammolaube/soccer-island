@@ -160,7 +160,7 @@ class PlayFor(models.Model):
 
     def __unicode__(self):
 
-        return self.player.__unicode__() + ' at ' + self.team.__unicode__()
+        return self.player.__unicode__() + ' | ' + self.team.__unicode__()
 
 
 class Team(models.Model):
@@ -616,13 +616,17 @@ class Game(models.Model):
     date = models.DateTimeField()
     away_team = models.ForeignKey(
         Team,
-        related_name='away'
+        related_name='away',
+        blank=True,
+        null=True,
     )
     home_team = models.ForeignKey(
         Team,
-        related_name='home'
+        related_name='home',
+        blank=True,
+        null=True,
     )
-    referee = models.ForeignKey(Referee)
+    referee = models.ForeignKey(Referee, blank=True, null=True)
     field = models.ForeignKey(Field)
     matchday = models.ForeignKey(Matchday, related_name='games')
     played = models.BooleanField(
@@ -682,11 +686,14 @@ class Game(models.Model):
 
     def __unicode__(self):
 
-        return '{0} vs {1} ({2})'.format(
+        return '{0} vs {1}'.format(
             self.home_team.__unicode__(),
             self.away_team.__unicode__(),
-            self.date
         )
+
+    def get_absolute_url(self):
+
+        return reverse('game', args=(self.pk,))
 
 
 class Card(models.Model):

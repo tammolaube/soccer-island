@@ -36,6 +36,47 @@ class ClubAdmin(admin.ModelAdmin):
 class MatchdayAdmin(admin.ModelAdmin):
     exclude = ('slug',)
 
+class GoalAdmin(admin.ModelAdmin):
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "scored_by":
+            kwargs["queryset"] = PlayFor.objects.all().select_related(
+                'player__person',
+                'team',
+            )
+        if db_field.name == "assisted_by":
+            kwargs["queryset"] = PlayFor.objects.all().select_related(
+                'player__person',
+                'team',
+            )
+        if db_field.name == "game":
+            kwargs["queryset"] = Game.objects.all().select_related(
+                'home_team',
+                'away_team',
+            )
+        return super(GoalAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class GameAdmin(admin.ModelAdmin):
+
+    fieldsets = (
+        ('Teams', {
+            'fields': ('home_team', 'away_team'),
+            'classes': ('wide',)
+        }),
+        (None, {
+            'fields': (
+                'date',
+                ('field', 'referee'),
+                'played',
+                'matchday',
+            )
+        })
+    )
+    list_display = ('matchday', 'home_team', 'away_team', 'date', 'played')
+    list_filter = ('matchday__season', 'matchday', 'date', 'played')
+    list_select_related = ('game',)
+
 admin.site.register(Classification, ClassificationAdmin)
 admin.site.register(Address)
 admin.site.register(Person)
@@ -49,8 +90,8 @@ admin.site.register(Referee)
 admin.site.register(Field)
 admin.site.register(Competition, CompetitionAdmin)
 admin.site.register(Season, SeasonAdmin)
-admin.site.register(Game)
-admin.site.register(Goal)
+admin.site.register(Game, GameAdmin)
+admin.site.register(Goal, GoalAdmin)
 admin.site.register(Card)
 admin.site.register(Suspension)
 admin.site.register(Matchday, MatchdayAdmin)

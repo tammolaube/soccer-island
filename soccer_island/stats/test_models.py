@@ -114,6 +114,10 @@ class SeasonTest(TestCase):
         goal_2 = Goal(scored_by=self.playfor_1, scored_for=self.team_1,
             game=self.game_season_1)
         goal_2.save()
+        # 1 goal by player 1 in season 2
+        goal_x = Goal(scored_by=self.playfor_1, scored_for=self.team_1,
+            game=self.game_season_2)
+        goal_x.save()
         # 1 goal in season 2 by player 2
         goal_3 = Goal(scored_by=self.playfor_2, scored_for=self.team_1,
             game=self.game_season_2)
