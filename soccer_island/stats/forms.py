@@ -4,6 +4,9 @@ from stats.models import Goal, PlayFor, Game, Team
 from django.db.models import Count, Q, F, Prefetch
 from django.forms.models import inlineformset_factory, BaseInlineFormSet
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, Field
+
 class GameUpdateForm(forms.ModelForm):
 
     class Meta:
@@ -11,13 +14,35 @@ class GameUpdateForm(forms.ModelForm):
         fields = ['date',
             'field', 'referee', 'played', 'matchday']
 
+    def __init__(self, *args, **kwargs):
+        super(GameUpdateForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+
+class GoalInlineFormSetHelper(FormHelper):
+
+    def __init__(self, *args, **kwargs):
+        super(GoalInlineFormSetHelper, self).__init__(*args, **kwargs)
+        self.form_tag = False
+        self.layout = Layout(
+            Fieldset(
+                'Goal {{ forloop.counter }}',
+                Field('scored_for', type="hidden"),
+                'scored_by',
+                'assisted_by',
+                'minute',
+                'own_goal',
+                'DELETE',
+            )
+        )
+        self.render_required_fields = False
+
 
 class GoalInlineFormSet(BaseInlineFormSet):
 
     def __init__(self, *args, **kwargs):
         super(GoalInlineFormSet, self).__init__(*args, **kwargs)
-
-        print(self.instance)
 
         for form in self.forms:
 

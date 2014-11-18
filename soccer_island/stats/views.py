@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from django.db import connection
 
 from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor, Matchday, Game, Goal
-from stats.forms import GameUpdateForm, GoalInlineFormSet
+from stats.forms import GameUpdateForm, GoalInlineFormSet, GoalInlineFormSetHelper
 from django.forms.models import inlineformset_factory
 
 
@@ -103,21 +103,58 @@ class GameDetailView(DetailView):
 def GameUpdateView(request, pk):
 
     game = get_object_or_404(Game, pk=pk)
-    GoalFormSet = inlineformset_factory(Game, Goal, formset=GoalInlineFormSet, extra=1)
+    GoalFormSet = inlineformset_factory(
+        Game,
+        Goal,
+        formset=GoalInlineFormSet,
+        extra=1
+    )
 
     if request.method == 'POST':
         form = GameUpdateForm(request.POST, instance=game)
-        goal_formset = GoalFormSet(request.POST, instance=game)
-        if form.is_valid() and goal_formset.is_valid():
+        home_goal_formset = GoalFormSet(request.POST,
+            instance=game,
+            prefix='home_goal'
+        )
+        away_goal_formset = GoalFormSet(request.POST,
+            instance=game,
+            prefix='away_goal'
+        )
+        if form.is_valid()\
+            and home_goal_formset.is_valid()\
+            and away_goal_formset.is_valid():
+
             form.save()
-            goal_formset.save()
+            home_goal_formset.save()
+            away_goal_formset.save()
             return HttpResponseRedirect(game.get_absolute_url())
 
     else:
         form = GameUpdateForm(instance=game)
-        goal_formset = GoalFormSet(instance=game)
+        home_goal_formset = GoalFormSet(
+            prefix='home_goal',
+            instance=game,
+            queryset=Goal.objects.filter(
+                scored_for=game.home_team,
+            ),
+            initial=[{'scored_for': game.home_team}]
+        )
+        away_goal_formset = GoalFormSet(
+            prefix='away_goal',
+            instance=game,
+            queryset=Goal.objects.filter(
+                scored_for=game.away_team,
+            ),
+            initial=[{'scored_for': game.away_team}]
+        )
 
-    context = {'form': form, 'goal_formset': goal_formset, 'game': game}
+    context = {
+        'form': form,
+        'home_goal_formset': home_goal_formset,
+        'away_goal_formset': away_goal_formset,
+        'goal_formset_helper': GoalInlineFormSetHelper(),
+        'game': game
+    }
 
     return render(request, 'stats/game_update.html', context)
 
