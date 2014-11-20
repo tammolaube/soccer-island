@@ -96,14 +96,12 @@ var incrementTotalForms = function(input){
 };
 
 jQuery('button.add-fieldset').click(function(){
-    var me = jQuery(this),
-        clone,
-        total;
-    clone = me.parent().prev().clone();
+    var parent = jQuery(this).parent(),
+        clone = parent.prev().clone(),
+        total = parent.parent().find('input[name$=\'TOTAL_FORMS\']');
+    incrementTotalForms(total);
     incrementClone(clone);
     removeCloneId(clone);
-    me.before(clone);
-    total = me.parent().find('input[name$=\'TOTAL_FORMS\']');
-    incrementTotalForms(total);
+    parent.before(clone);
 });
 {% endblock %}
