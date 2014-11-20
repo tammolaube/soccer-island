@@ -8,6 +8,14 @@ urlpatterns = patterns('',
         generic.TemplateView.as_view(template_name='stats/home.html'),
         name='home'
     ),
+    url(r'^login/',
+        views.login_view,
+        name='login'
+    ),
+    url(r'^logout/',
+        views.logout_view,
+        name='logout'
+    ),
     url(r'^team/(?P<team>.*)/$',
         views.TeamTemplateView.as_view(),
         name='team'
@@ -17,8 +25,8 @@ urlpatterns = patterns('',
         name='game'
     ),
     url(r'^game/(?P<pk>\d+)/update/$',
-        views.GameUpdateView,
-        name='game_update'
+        views.update_game_view,
+        name='update_game'
     ),
     url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/$',
         views.StandingsTemplateView.as_view(),
