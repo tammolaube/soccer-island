@@ -491,7 +491,7 @@ class Season(models.Model):
 
         return Player.objects.filter(
                 playfor__goal_scored_by__game__matchday__season=self,
-                playfor__goal_scored_by__own_goal=False,
+                playfor__goal_scored_by__scored_for=F('playfor__team')
             ).annotate(
                 num_scored=Count('playfor__goal_scored_by')
             ).order_by(
@@ -502,7 +502,6 @@ class Season(models.Model):
 
         return Player.objects.filter(
                 playfor__goal_assisted_by__game__matchday__season=self,
-                playfor__goal_assisted_by__own_goal=False,
             ).annotate(
                 num_assisted=Count('playfor__goal_assisted_by'),
             ).order_by(
@@ -589,7 +588,16 @@ class Matchday(models.Model):
 
 class Goal(models.Model):
 
-    minute = models.SmallIntegerField(blank=True, null=True)
+    minute = models.CharField(
+        blank=True,
+        validators=[
+            RegexValidator(
+                regex='^(\d{1,3})(\+\d{1,2})?$',
+                message='Insert the minute the goal was scored. Specify stoppage times like \'45+2\' or \'90+3\'.'
+            )
+        ],
+        max_length=6
+    )
     scored_by = models.ForeignKey(
         PlayFor,
         related_name='goal_scored_by',
@@ -604,7 +612,6 @@ class Goal(models.Model):
     )
     scored_for = models.ForeignKey(Team, related_name='goal_scored_for')
     game = models.ForeignKey('Game', related_name='goals')
-    own_goal = models.BooleanField(default=False)
 
     def __unicode__(self):
 

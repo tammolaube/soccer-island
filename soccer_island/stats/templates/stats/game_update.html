@@ -9,27 +9,101 @@
 </div>
 <form action="{{ game.get_absolute_url }}update/" role="form" method="post">
   {% csrf_token %}
-  <div>
-    {% crispy form %}
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">Home: {{ game.home_team }}</div>
-            <div class="panel-body">
-                {% crispy home_goal_formset goal_formset_helper %}
+  <div role="tabpanel">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#goals" aria-controls="goals" role="tab" data-toggle="tab">Goals</a></li>
+        <li role="presentation"><a href="#cards" aria-controls="cards" role="tab" data-toggle="tab">Cards</a></li>
+        <li role="presentation"><a href="#meta" aria-controls="meta" role="tab" data-toggle="tab">Meta</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="goals">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>
+                        Home Goals {{ game.home_team }}
+                    </h3>
+                    {% crispy home_goal_formset goal_formset_helper %}
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success btn-sm add-fieldset">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            Add Home Goal
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3>
+                        Away Goals {{ game.away_team }}
+                    </h3>
+                    {% crispy away_goal_formset goal_formset_helper %}
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success btn-sm add-fieldset">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            Add Away Goal
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">Away: {{ game.away_team }}</div>
-            <div class="panel-body">
-                {% crispy away_goal_formset goal_formset_helper %}
-            </div>
+        <div role="tabpanel" class="tab-pane" id="cards">
+        </div>
+        <div role="tabpanel" class="tab-pane" id="meta">
+            {% crispy form %}
         </div>
     </div>
+
   </div>
-  <input type="submit" value="Submit" />
+  <div class="form-group">
+    {% crispy form_played %}
+  </div>
+  <div class="form-group">
+    <input type="submit" value="Submit" class="btn btn-primary"/>
+    <a class="btn btn-default" href="{{ game.get_absolute_url }}" role="button">Cancel</a>
+  </div>
 </form>
+{% endblock %}
+{% block script %}
+
+var incrementClone = function(clone){
+    var inputs = clone.find('input, select'),
+        divs = clone.find('div.form-group, div.checkbox'),
+        labels = clone.find('label');
+    inputs.attr('id', incrementCloneAttr);
+    inputs.attr('name', incrementCloneAttr);
+    divs.attr('id', incrementCloneAttr);
+    labels.attr('for', incrementCloneAttr);
+};
+
+var incrementCloneAttr = function(i, str){
+    var regex = /-(\d+)-/gi,
+        str = str || '';
+    return str.replace(regex, function(m, num){
+        return '-' + ++num + '-';
+    });
+};
+
+var removeCloneId = function(clone){
+    clone.find('input:hidden.element-id').removeAttr('value');
+};
+
+var incrementTotalForms = function(input){
+    jQuery(input).attr('value', function(i, num){
+        return ++num;
+    });
+};
+
+jQuery('button.add-fieldset').click(function(){
+    var me = jQuery(this),
+        clone,
+        total;
+    clone = me.parent().prev().clone();
+    incrementClone(clone);
+    removeCloneId(clone);
+    me.before(clone);
+    total = me.parent().find('input[name$=\'TOTAL_FORMS\']');
+    incrementTotalForms(total);
+});
 {% endblock %}

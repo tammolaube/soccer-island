@@ -45,3 +45,7 @@ div.com-soccerisland--matchday div.panel tr.game-score > td {
 div.com-soccerisland--matchday div.panel tr.game-field > td {
   border-top: none;
 }
+div.delete-checkbox div.form-group, div.delete-checkbox div.checkbox {
+  margin-top: 0;
+  margin-bottom: 0;
+}

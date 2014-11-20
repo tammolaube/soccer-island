@@ -57,8 +57,9 @@ class SeasonTest(TestCase):
         self.field = Field(name='Field 1', address=self.address)
         self.field.save()
 
-        # create a team
+        # create teams
         self.team_1 = create_team('Team 1', self.classification)
+        self.team_2 = create_team('Team 2', self.classification)
 
         # create some players
         self.player_1 = create_player('One', '1')
@@ -87,7 +88,7 @@ class SeasonTest(TestCase):
         self.matchday_season_1 = Matchday(season=self.season_1, label='1', date=datetime.date.today())
         self.matchday_season_1.save()
         self.game_season_1 = Game(matchday=self.matchday_season_1, date=datetime.date.today(),
-            away_team=self.team_1, home_team=self.team_1, referee=self.referee,
+            away_team=self.team_1, home_team=self.team_2, referee=self.referee,
             played=True, field=self.field)
         self.game_season_1.save()
 
@@ -124,7 +125,7 @@ class SeasonTest(TestCase):
         goal_3.save()
         # 1 own goal in season 1 by player 3
         goal_4 = Goal(scored_by=self.playfor_3,
-            scored_for=self.team_1, game=self.game_season_1, own_goal=True)
+            scored_for=self.team_2, game=self.game_season_1)
         goal_4.save()
 
         self.assertIn(self.player_1, self.season_1.scorers())

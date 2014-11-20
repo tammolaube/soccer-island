@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from django.db import connection
 
 from stats.models import Classification, Competition, Season, Team, Player, PlayFor, CoachFor, Matchday, Game, Goal
-from stats.forms import GameUpdateForm, GoalInlineFormSet, GoalInlineFormSetHelper
+from stats.forms import GameUpdateForm, GamePlayedUpdateForm, GoalInlineFormSet, GoalInlineFormSetHelper
 from django.forms.models import inlineformset_factory
 
 
@@ -112,6 +112,7 @@ def GameUpdateView(request, pk):
 
     if request.method == 'POST':
         form = GameUpdateForm(request.POST, instance=game)
+        form_played = GamePlayedUpdateForm(request.POST, instance=game)
         home_goal_formset = GoalFormSet(request.POST,
             instance=game,
             prefix='home_goal'
@@ -121,23 +122,29 @@ def GameUpdateView(request, pk):
             prefix='away_goal'
         )
         if form.is_valid()\
+            and form_played.is_valid()\
             and home_goal_formset.is_valid()\
             and away_goal_formset.is_valid():
 
             form.save()
+            form_played.save()
             home_goal_formset.save()
             away_goal_formset.save()
             return HttpResponseRedirect(game.get_absolute_url())
 
     else:
         form = GameUpdateForm(instance=game)
+        form_played = GamePlayedUpdateForm(instance=game)
         home_goal_formset = GoalFormSet(
             prefix='home_goal',
             instance=game,
             queryset=Goal.objects.filter(
                 scored_for=game.home_team,
             ),
-            initial=[{'scored_for': game.home_team}]
+            initial=[{
+                'scored_for': game.home_team,
+                'DELETE': True,
+            }]
         )
         away_goal_formset = GoalFormSet(
             prefix='away_goal',
@@ -145,11 +152,15 @@ def GameUpdateView(request, pk):
             queryset=Goal.objects.filter(
                 scored_for=game.away_team,
             ),
-            initial=[{'scored_for': game.away_team}]
+            initial=[{
+                'scored_for': game.away_team,
+                'DELETE': True,
+            }]
         )
 
     context = {
         'form': form,
+        'form_played': form_played,
         'home_goal_formset': home_goal_formset,
         'away_goal_formset': away_goal_formset,
         'goal_formset_helper': GoalInlineFormSetHelper(),
