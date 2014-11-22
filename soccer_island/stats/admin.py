@@ -25,7 +25,8 @@ class CompetitionAdmin(admin.ModelAdmin):
     exclude = ('slug',)
 
 class SeasonAdmin(admin.ModelAdmin):
-    fields = ('label', 'competition', 'start_date', 'end_date', 'enrolled',)
+    fields = ('label', 'competition',
+        'start_date', 'end_date', 'enrolled', 'published',)
 
 class TeamAdmin(admin.ModelAdmin):
     fields = ('name', 'classification', 'colors', 'club',)
@@ -91,7 +92,6 @@ admin.site.register(Field)
 admin.site.register(Competition, CompetitionAdmin)
 admin.site.register(Season, SeasonAdmin)
 admin.site.register(Game, GameAdmin)
-admin.site.register(Goal, GoalAdmin)
 admin.site.register(Card)
 admin.site.register(Suspension)
 admin.site.register(Matchday, MatchdayAdmin)

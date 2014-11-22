@@ -3,6 +3,9 @@ from django.views import generic
 
 from stats import views
 
+REGEX_CLASSIFICATION_COMPETITION_SEASON =\
+    '(?P<classification>[^/]+)/(?P<competition>[^/]+)/(?P<season>[^/]+)?/?$'
+
 urlpatterns = patterns('',
     url(r'^/?$',
         generic.TemplateView.as_view(template_name='stats/home.html'),
@@ -28,19 +31,19 @@ urlpatterns = patterns('',
         views.update_game_view,
         name='update_game'
     ),
-    url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/$',
+    url(r'^standings/' + REGEX_CLASSIFICATION_COMPETITION_SEASON,
         views.StandingsTemplateView.as_view(),
         name='standings'
     ),
-    url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/schedule/$',
+    url(r'^schedule/' + REGEX_CLASSIFICATION_COMPETITION_SEASON,
         views.MatchdayListView.as_view(),
         name='matchdays'
     ),
-    url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/disciplinary/$',
+    url(r'^disciplinary/' + REGEX_CLASSIFICATION_COMPETITION_SEASON,
         views.DisciplinaryListView.as_view(),
         name='disciplinary'
     ),
-    url(r'^season/(?P<classification>.*)/(?P<competition>.*)/(?P<season>\d{4}-\d{4})/goals/$',
+    url(r'^goals/' + REGEX_CLASSIFICATION_COMPETITION_SEASON,
         views.GoalsListView.as_view(),
         name='goals'
     ),

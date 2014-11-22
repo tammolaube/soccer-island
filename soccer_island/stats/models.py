@@ -199,7 +199,7 @@ class Team(models.Model):
             to_date__lt=datetime.date.today()
         )
 
-    def url(self):
+    def get_absolute_url(self):
 
         return reverse('team', args=(self.slug,))
 
@@ -378,10 +378,17 @@ class Season(models.Model):
     end_date = models.DateField()
     competition = models.ForeignKey(Competition)
     enrolled = models.ManyToManyField(Team)
+    published = models.BooleanField(default=False)
 
     # This returns a Season or raises a 404 error.
     @staticmethod
     def get_season_by_slugs(classification, competition, season):
+
+        print(season)
+
+        if not season:
+
+            return Season.get_current_season_by_slugs(classification, competition)
 
         """
         Slugs for classification, competition and season are
@@ -389,10 +396,25 @@ class Season(models.Model):
         """
         season = get_object_or_404(
             Season.objects.select_related('competition__classification'),
+            published=True,
             competition__slug=competition,
             competition__classification__slug=classification,
             slug=season
         )
+
+        return season
+
+    # This returns the current season
+    @staticmethod
+    def get_current_season_by_slugs(classification, competition):
+
+        season = Season.objects.filter(
+            published=True,
+            competition__slug=competition,
+            competition__classification__slug=classification,
+        ).select_related(
+            'competition__classification'
+        ).order_by('-start_date')[:1][0]
 
         return season
 
@@ -697,6 +719,12 @@ class Game(models.Model):
             self.home_team.__unicode__(),
             self.away_team.__unicode__(),
         )
+
+
+    def get_absolute_update_url(self):
+
+        return reverse('update_game', args=(self.pk,))
+
 
     def get_absolute_url(self):
 

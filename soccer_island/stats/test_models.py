@@ -164,3 +164,33 @@ class SeasonTest(TestCase):
         num_of_yellows = self.\
             playfor_1.count_yellow_cards_per(self.season_1)
         self.assertEqual(num_of_yellows, 2)
+
+    def test_get_season(self):
+
+        # create two seasons
+        classification = Classification(label='test mens')
+        classification.save()
+        competition = Competition(
+            name='div 1',
+            mode='l',
+            classification=classification
+        )
+        competition.save()
+        season_1 = Season(label='s1',
+            start_date=datetime.date.today(),
+            end_date=datetime.date.today() + datetime.timedelta(365),
+            competition=competition,
+            published=True
+        )
+        season_2 = Season(label='s2',
+            start_date=datetime.date.today() + datetime.timedelta(365),
+            end_date=datetime.date.today() + datetime.timedelta(730),
+            competition=competition
+        )
+        season_1.save()
+        season_2.save()
+
+        self.assertIn(season_1,
+            Season.get_current_season_by_slugs('test-mens', 'div-1'))
+        self.assertNotIn(season_2,
+            Season.get_current_season_by_slugs('test-mens', 'div-1'))

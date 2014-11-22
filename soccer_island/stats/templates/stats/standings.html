@@ -22,7 +22,7 @@
         {% for team in standings %}
         <tr>
         <td>{{ forloop.counter }}</td>
-        <td><a href="{{ team.url }}">{{ team.name }}</a></td>
+        <td><a href="{{ team.get_absolute_url }}">{{ team.name }}</a></td>
         <td>{{ team.num_games }}</td>
         <td>{{ team.num_wins }}</td>
         <td>{{ team.num_draws }}</td>

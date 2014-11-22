@@ -42,7 +42,7 @@ div.com-soccerisland--matchday div.panel li.game-score {
 div.com-soccerisland--matchday div.panel tr.game-score > td {
   border-bottom: none;
 }
-div.com-soccerisland--matchday div.panel tr.game-field > td {
+div.com-soccerisland--matchday div.panel tr.game-info > td {
   border-top: none;
 }
 div.delete-checkbox div.form-group, div.delete-checkbox div.checkbox {
@@ -54,14 +54,6 @@ div.delete-checkbox div.form-group, div.delete-checkbox div.checkbox {
     max-width: 330px;
     padding: 15px;
     margin: 0 auto;
-}
-.form-signin .form-signin-heading, .form-signin .checkbox
-{
-    margin-bottom: 10px;
-}
-.form-signin .checkbox
-{
-    font-weight: normal;
 }
 .form-signin .form-control
 {
@@ -88,22 +80,6 @@ div.delete-checkbox div.form-group, div.delete-checkbox div.checkbox {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-}
-.account-wall
-{
-    margin-top: 20px;
-    padding: 40px 0px 20px 0px;
-    background-color: #f7f7f7;
-    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-}
-.login-title
-{
-    color: #555;
-    font-size: 18px;
-    font-weight: 400;
-    display: block;
 }
 .profile-img
 {
