@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-sm-6 col-md-4 col-md-offset-4 col-sm-offset-3">
+      <h3 class="text-center text-muted">Signed out</h3>
+        <div class="well well-lg">
+          <img class="profile-img" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"
+          alt="">
+          <div class="form-signin">
+            <div class="alert alert-success" role="alert"><strong>Success:</strong> Signed out.</div>
+            <a href="/" type="button" class="btn btn-primary btn-lg btn-block">
+              <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+              Home
+            </a>
+            <a href="/login" type="button" class="btn btn-default btn-lg btn-block">
+              Sign in again
+            </a>
+          </div>
+        </div>
+        <p class="text-center" style="margin-top: 10px;">
+          Go back to the <a href="/">home page</a> or
+          <a href="/login">sign in</a> again.
+        </>
+    </div>
+  </div>
+
+{% endblock %}

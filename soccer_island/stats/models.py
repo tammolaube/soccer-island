@@ -318,6 +318,7 @@ class Field(models.Model):
         max_length=64,
         unique=True
     )
+    about = models.CharField(max_length=1024, blank=True)
     address = models.ForeignKey(Address)
 
     def __unicode__(self):
