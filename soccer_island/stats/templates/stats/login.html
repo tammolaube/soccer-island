@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Sign In{% endblock %}
+
+{% block header %}
+  {% include 'header.html' %}
+{% endblock %}
+
+{% block navigation %}
+{% endblock %}
 
 {% block content %}
 
@@ -22,6 +29,11 @@
             Sign in</button>
         </form>
       </div>
+      <p class="text-center" style="margin-top: 10px;">
+        Go <a href="{{ next }}">back</a> or to the <a href="/">
+            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+            home page</a>.
+      </p>
     </div>
   </div>
 

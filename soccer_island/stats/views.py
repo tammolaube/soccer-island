@@ -1,19 +1,13 @@
-import datetime
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db import connection
-from django.db.models import F, Q, Prefetch
 from django.forms.models import inlineformset_factory
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render_to_response, render
-from django.template import RequestContext 
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView, ListView, DetailView
 
 from stats.forms import (GameUpdateForm, GamePlayedUpdateForm,
                             GoalInlineFormSet, GoalInlineFormSetHelper)
-from stats.models import (Classification, Competition, Season, Team, Player,
-                            PlayFor, CoachFor, Matchday, Game, Goal)
+from stats.models import Season, Team, PlayFor, Matchday, Game, Goal
 
 
 def login_view(request):
@@ -28,7 +22,8 @@ def login_view(request):
                 login(request, user)
                 return HttpResponseRedirect(request.POST.get('next', '/'))
             else:
-                context['invalid_alert'] = 'The account %s is inactive.' % username
+                context['invalid_alert'] = 'The account %s is inactive.'\
+                    % username
         else:
             context['invalid_alert'] = 'Invalid username or password.'
             context['username'] = username
@@ -42,8 +37,9 @@ def login_view(request):
 def logout_view(request):
 
     logout(request)
+    context = { 'next': request.GET.get('next', '/') }
 
-    return render(request, 'stats/logout.html')
+    return render(request, 'stats/logout.html', context)
 
 
 @login_required(login_url='/login/')
@@ -205,6 +201,28 @@ class GameDetailView(DetailView):
     template_name = 'stats/game.html'
 
 
+class OverviewTemplateView(TemplateView):
+
+    template_name = 'stats/overview.html'
+
+    def get_context_data(self, **kwargs):
+
+        season = Season.get_season_by_slugs(
+            self.kwargs['classification'],
+            self.kwargs['competition'],
+            self.kwargs['season']
+        )
+
+        context = super(OverviewTemplateView, self).get_context_data(**kwargs)
+        context['season'] = season
+        context['standings'] = season.standings()
+        context['matchdays'] = season.last_and_next_matchdays()
+        context['scorers'] = season.with_teams(season.scorers())[:5]
+        context['assistants'] = season.with_teams(season.assistants())[:5]
+
+        return context
+
+
 class StandingsTemplateView(TemplateView):
 
     template_name = 'stats/standings.html'
@@ -220,9 +238,6 @@ class StandingsTemplateView(TemplateView):
         context = super(StandingsTemplateView, self).get_context_data(**kwargs)
         context['season'] = season
         context['standings'] = season.standings()
-        context['matchdays'] = season.last_and_next_matchdays()
-        context['scorers'] = season.with_teams(season.scorers())[:5]
-        context['assistants'] = season.with_teams(season.assistants())[:5]
 
         return context
 

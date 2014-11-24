@@ -3,10 +3,16 @@
 {% block title %}Schedule - {{ season }}{% endblock %}
 
 {% block content %}
-<div class="page-header">
-  <h1>Schedule <small>{{ season }}</small></h1>
-</div>
-{% for matchday in matchday_list %}
-  {% include "stats/matchday.html" %}
-{% endfor%}
+
+  <div class="page-header">
+    <h1>Schedule <small>{{ season }}</small></h1>
+  </div>
+  <div class="row">
+    {% for matchday in matchday_list %}
+      <div class="col-md-4">
+        {% include "stats/matchday.html" %}
+      </div>
+    {% endfor%}
+  </div>
+
 {% endblock %}

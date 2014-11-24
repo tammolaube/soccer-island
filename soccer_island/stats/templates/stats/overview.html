@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+
+{% block title %}Overview - {{ season }}{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+  <h1>Overview <small>{{ season }}</small></h1>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Standings</h3>
+    <table class="table table-striped">
+        <tr>
+        <th>#</th>
+        <th>Team</th>
+        <th class="text-center"><abbr title="Played">P</abbr></th>
+        <th class="text-center"><abbr title="Won">W</abbr></th>
+        <th class="text-center"><abbr title="Drawn">D</abbr></th>
+        <th class="text-center"><abbr title="Lost">L</abbr></th>
+        <th class="text-center"><abbr title="Goals For">GF</abbr></th>
+        <th class="text-center"><abbr title="Goals Against">GA</abbr></th>
+        <th class="text-center"><abbr title="Goal Difference">+/-</abbr></th>
+        <th class="text-center"><abbr title="Points">Pts</abbr></th>
+        </tr>
+        {% for team in standings %}
+        <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><a href="{{ team.get_absolute_url }}">{{ team.name }}</a></td>
+        <td class="text-center">{{ team.num_games }}</td>
+        <td class="text-center">{{ team.num_wins }}</td>
+        <td class="text-center">{{ team.num_draws }}</td>
+        <td class="text-center">{{ team.num_losses }}</td>
+        <td class="text-center">{{ team.num_scored_goals }}</td>
+        <td class="text-center">{{ team.num_conceded_goals }}</td>
+        <td class="text-center">{{ team.goal_diff }}</td>
+        <td class="text-center">{{ team.num_points}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>
+      <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+      Latest Scores and Upcoming Games
+    </h3>
+    <div class="row">
+      {% for matchday in matchdays %}
+        <div class="col-md-6">
+          {% include 'stats/matchday.html' %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <h3>
+      <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
+      Leading Scorers
+    </h3>
+    {% include 'stats/scorers.html' %}
+  </div>
+  <div class="col-md-4">
+    <h3>
+      <span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
+      Assist Leaders
+    </h3>
+    {% include 'stats/assists.html' %}
+  </div>
+</div>
+
+{% endblock %}

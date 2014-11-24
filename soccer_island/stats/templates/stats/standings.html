@@ -1,46 +1,41 @@
 {% extends "base.html" %}
+
+
 {% block title %}Standings - {{ season }}{% endblock %}
+
+
 {% block content %}
+
 <div class="page-header">
   <h1>Standings <small>{{ season }}</small></h1>
 </div>
-<div class="col-md-8">
-  <div class="row">
-    <table class="table table-striped">
-        <tr>
-        <th>#</th>
-        <th>Team</th>
-        <th>GP</th>
-        <th>W</th>
-        <th>T</th>
-        <th>L</th>
-        <th>Diff</th>
-        <th>G</th>
-        <th>A</th>
-        <th>P</th>
-        </tr>
-        {% for team in standings %}
-        <tr>
-        <td>{{ forloop.counter }}</td>
-        <td><a href="{{ team.get_absolute_url }}">{{ team.name }}</a></td>
-        <td>{{ team.num_games }}</td>
-        <td>{{ team.num_wins }}</td>
-        <td>{{ team.num_draws }}</td>
-        <td>{{ team.num_losses }}</td>
-        <td>{{ team.goal_diff }}</td>
-        <td>{{ team.num_scored_goals }}</td>
-        <td>{{ team.num_conceded_goals }}</td>
-        <td>{{ team.num_points}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-  </div>
-  <div class="row">
-    {% include 'stats/scorers.html' %}
-    {% include 'stats/assists.html' %}
-  </div>
-</div>
-{% for matchday in matchdays %}
-{% include 'stats/matchday.html' %}
-{% endfor %}
+<table class="table table-striped">
+    <tr>
+    <th>#</th>
+    <th>Team</th>
+    <th class="text-center">Played</th>
+    <th class="text-center">Won</th>
+    <th class="text-center">Drawn</th>
+    <th class="text-center">Lost</th>
+    <th class="text-center">Goals For</th>
+    <th class="text-center">Goals Against</th>
+    <th class="text-center">Goal Difference</th>
+    <th class="text-center">Points</th>
+    </tr>
+    {% for team in standings %}
+    <tr>
+    <td>{{ forloop.counter }}</td>
+    <td><a href="{{ team.get_absolute_url }}">{{ team.name }}</a></td>
+    <td class="text-center">{{ team.num_games }}</td>
+    <td class="text-center">{{ team.num_wins }}</td>
+    <td class="text-center">{{ team.num_draws }}</td>
+    <td class="text-center">{{ team.num_losses }}</td>
+    <td class="text-center">{{ team.num_scored_goals }}</td>
+    <td class="text-center">{{ team.num_conceded_goals }}</td>
+    <td class="text-center">{{ team.goal_diff }}</td>
+    <td class="text-center">{{ team.num_points}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
 {% endblock %}

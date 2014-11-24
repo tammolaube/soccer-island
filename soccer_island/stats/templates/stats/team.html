@@ -7,8 +7,8 @@
   <h1>{{ team.name }} <small>{{ team.classification }}</small></h1>
 </div>
   <div class="row">
-    <div class="col-md-6">
-      <h3>Roster</h3>
+    <div class="col-md-8">
+      <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Roster</h3>
       <table class="table table-bordered com-soccerisland--roster">
         <tr><th>#</th><th>Name</th></tr>
         {% regroup current_playfors by injury_reserve as current_playfors_by_ir %}
@@ -32,12 +32,18 @@
                 title="Suspension ({{ suspension.suspended_until|timeuntil:suspension.date_received }})"
                 data-html="True"
                 data-content="
-                <div class='text-nowrap'>
-                  {{ suspension.season|default_if_none:"All&nbsp;seasons" }}
-                </div>
-                <div class='text-nowrap'>
-                  {{ suspension.date_received }} - {{ suspension.suspended_until }}
-                </div>
+                <dl>
+                  <dt>Competition</dt>
+                  <dd class='text-nowrap'>{{ suspension.competition|default_if_none:"All competitions" }}</dd>
+                  <dt>Time Frame</dt>
+                  <dd class='text-nowrap'>{{ suspension.date_received }} - {{ suspension.suspended_until }}</dd>
+                  <dt>Fine</dt>
+                  <dd class='text-nowrap'>${{ suspension.fine }}
+                    ({{ suspension.fine_paid|yesno:"<strong class=\"text-success\">paid</strong>,<strong class=\"text-danger\">unpaid</strong>" }})
+                  </dd>
+                  <dt>Reason</dt>
+                  <dd>{{ suspension.reason }}</dd>
+                </dl>
                 ">
                  <span class="glyphicon glyphicon-ban-circle"></span> {{ suspension.suspended_until|timeuntil }} left
               </a>
@@ -48,7 +54,30 @@
           {% endfor %}
         {% endfor %}
       </table>
-      <h3>Former Players</h3>
+      <h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Responsible</h3>
+      <table class="table table-striped">
+        {% for coachfor in current_coachfors %}
+        <tr>
+          <td>
+            <h4>
+              {{ coachfor.coach }} <br/>
+              <small>
+                {% if coachfor.responsibility == "a" %}
+                Assistant coach
+                {% elif coachfor.responsibility == "m" %}
+                Manager
+                {% else %}
+                Coach
+                {% endif %}
+              </small>
+            </h4>
+            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Email: {{ coachfor.coach.person.address.email|default:"-" }} <br/>
+            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Phone: {{ coachfor.coach.person.address.phone|default:"-" }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <h3><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Former Players</h3>
       <table class="table table-bordered">
         <tr><th>Name</th><th>From</th><th>To</th></tr>
         {% for playfor in former_playfors %}
@@ -60,34 +89,9 @@
         {% endfor %}
       </table>
     </div>
-    <div class="col-md-3">
-      <h3>Responsible:</h3>
-      <table class="table table-striped">
-        {% for coachfor in current_coachfors %}
-        <tr>
-          <td>
-            <h4>
-              {{ coachfor.coach }} <br/>
-              <small>
-                {% if coachfor.responsibility == "A" %}
-                Assistant Coach
-                {% elif coachfor.responsibility == "M" %}
-                Manager
-                {% else %}
-                Coach
-                {% endif %}
-              </small>
-            </h4>
-            Email: {{ coachfor.coach.person.address.email|default:"-" }} <br/>
-            Phone: {{ coachfor.coach.person.address.phone|default:"-" }}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-    </div>
-    <div class="col-md-3">
-      <h3>Enrolled in:</h3>
-      <table class="table">
+    <div class="col-md-4">
+      <h3><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Enrolled in</h3>
+      <table class="table table-condensed">
         {% for season in seasons %}
         <tr><td>{{ season }}</td></tr>
         {% endfor %}

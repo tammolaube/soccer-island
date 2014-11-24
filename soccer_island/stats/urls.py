@@ -31,6 +31,10 @@ urlpatterns = patterns('',
         views.update_game_view,
         name='update_game'
     ),
+    url(r'^overview/' + REGEX_CLASSIFICATION_COMPETITION_SEASON,
+        views.OverviewTemplateView.as_view(),
+        name='overview'
+    ),
     url(r'^standings/' + REGEX_CLASSIFICATION_COMPETITION_SEASON,
         views.StandingsTemplateView.as_view(),
         name='standings'

@@ -58,11 +58,11 @@ class Suspension(models.Model):
         max_length=1024,
         blank=True
     )
-    fine = models.SmallIntegerField()
+    fine = models.SmallIntegerField(help_text='Amount of US Dollar.')
     fine_paid = models.BooleanField(default=False)
     player = models.ForeignKey('Player')
-    season = models.ForeignKey(
-        'Season',
+    competition = models.ForeignKey(
+        'Competition',
         blank=True,
         null=True
     )
@@ -107,7 +107,7 @@ class Person(models.Model):
 
 class Club(models.Model):
 
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     slug = models.SlugField(max_length=64, unique=True)
     address = models.ForeignKey(Address, blank=True, null=True)
 
@@ -299,7 +299,7 @@ class CoachFor(models.Model):
 
     def __unicode__(self):
 
-        return self.coach.__unicode__() + ' ' + self.team.__unicode__()
+        return self.coach.__unicode__() + ' | ' + self.team.__unicode__()
 
 
 class Referee(models.Model):
@@ -432,10 +432,7 @@ class Season(models.Model):
         This can be improved but I'm not sure that the code will stay
         as readable.
         '''
-        teams = Team.objects.filter(season=self).prefetch_related(
-            Prefetch('home__goals__scored_for'),
-            Prefetch('away__goals__scored_for')
-        )
+        teams = Team.objects.filter(season=self)
 
         for team in teams:
 
@@ -447,10 +444,21 @@ class Season(models.Model):
             team.num_conceded_goals = 0
             team.goal_diff = 0
 
-            for game in list(team.home.all()) + list(team.away.all()):
+            home_games = team.home.filter(
+                matchday__season=self,
+                played=True
+            ).prefetch_related(
+                Prefetch('goals__scored_for'),
+            )
 
-                if not game.played:
-                    continue
+            away_games = team.away.filter(
+                matchday__season=self,
+                played=True
+            ).prefetch_related(
+                Prefetch('goals__scored_for'),
+            )
+
+            for game in list(home_games) + list(away_games):
 
                 team.num_games += 1
 
@@ -638,7 +646,7 @@ class Goal(models.Model):
 
     def __unicode__(self):
 
-        return self.game.__unicode__() + ' ' + str(self.minute) + 'min'
+        return self.game.__unicode__() + ' ' + self.scored_for.__unicode__()
 
 
 class Game(models.Model):
