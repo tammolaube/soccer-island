@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="page-header">
-  <h1>Update: {{ game }} <small>{{ team.matchday.season }}</small></h1>
+  <h1>{{ game }} <small>{{ game.matchday.season }}</small></h1>
 </div>
 <form action="{{ game.get_absolute_url }}update/" role="form" method="post">
   {% csrf_token %}
@@ -23,32 +23,47 @@
         <div role="tabpanel" class="tab-pane active" id="goals">
             <div class="row">
                 <div class="col-md-6">
-                    <h3>
-                        Home Goals {{ game.home_team }}
-                    </h3>
+                  <h4>
+                    {{ game.home_team }} <small>(Home)</small>
+                  </h4>
+                  <div class="well">
                     {% crispy home_goal_formset goal_formset_helper %}
                     <div class="form-group">
-                        <button type="button" class="btn btn-success btn-sm add-fieldset">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            Add Home Goal
-                        </button>
+                      <button type="button" class="btn btn-success btn-sm add-fieldset">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        Add Home Goal
+                      </button>
                     </div>
+                  </div>
                 </div>
                 <div class="col-md-6">
-                    <h3>
-                        Away Goals {{ game.away_team }}
-                    </h3>
+                  <h4>
+                    {{ game.away_team }} <small>(Away)</small>
+                  </h4>
+                  <div class="well">
                     {% crispy away_goal_formset goal_formset_helper %}
                     <div class="form-group">
-                        <button type="button" class="btn btn-success btn-sm add-fieldset">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            Add Away Goal
-                        </button>
+                      <button type="button" class="btn btn-success btn-sm add-fieldset">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        Add Away Goal
+                      </button>
                     </div>
+                  </div>
                 </div>
             </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="cards">
+          <div class="well">
+            <div class="row">
+              {% crispy card_formset card_formset_helper %}
+              <div class="form-group col-md-12">
+                <button type="button" class="btn btn-success btn-sm add-fieldset">
+                  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                  Add Card
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="meta">
             {% crispy form %}
@@ -66,42 +81,59 @@
 </form>
 {% endblock %}
 {% block script %}
+jQuery(document).ready(function(){
 
-var incrementClone = function(clone){
-    var inputs = clone.find('input, select'),
-        divs = clone.find('div.form-group, div.checkbox'),
-        labels = clone.find('label');
-    inputs.attr('id', incrementCloneAttr);
-    inputs.attr('name', incrementCloneAttr);
-    divs.attr('id', incrementCloneAttr);
-    labels.attr('for', incrementCloneAttr);
-};
+    var incrementClone = function(clone){
+        var inputs = clone.find('input, select'),
+            divs = clone.find('div.form-group, div.checkbox'),
+            labels = clone.find('label');
+        inputs.attr('id', incrementCloneAttr);
+        inputs.attr('name', incrementCloneAttr);
+        divs.attr('id', incrementCloneAttr);
+        labels.attr('for', incrementCloneAttr);
+    };
 
-var incrementCloneAttr = function(i, str){
-    var regex = /-(\d+)-/gi,
-        str = str || '';
-    return str.replace(regex, function(m, num){
-        return '-' + ++num + '-';
+    var incrementCloneAttr = function(i, str){
+        var regex = /-(\d+)-/gi,
+            str = str || '';
+        return str.replace(regex, function(m, num){
+            return '-' + ++num + '-';
+        });
+    };
+
+    var removeCloneId = function(clone){
+        clone.find('input:hidden.element-id').removeAttr('value');
+    };
+
+    var incrementTotalForms = function(input){
+        jQuery(input).attr('value', function(i, num){
+            return ++num;
+        });
+    };
+
+    jQuery('button.add-fieldset').click(function(){
+        var parent = jQuery(this).parent(),
+            clone = parent.prev().clone(),
+            total = parent.parent().find('input[name$=\'TOTAL_FORMS\']');
+        incrementTotalForms(total);
+        incrementClone(clone);
+        removeCloneId(clone);
+        parent.before(clone);
+        jQuery(clone).find('div.delete-checkbox input').change(function(){
+            jQuery(this).parents('.panel').toggleClass('greyed-out');
+        });
     });
-};
 
-var removeCloneId = function(clone){
-    clone.find('input:hidden.element-id').removeAttr('value');
-};
-
-var incrementTotalForms = function(input){
-    jQuery(input).attr('value', function(i, num){
-        return ++num;
+    jQuery('div.delete-checkbox input').change(function(){
+        jQuery(this).parents('.panel').toggleClass('greyed-out');
     });
-};
 
-jQuery('button.add-fieldset').click(function(){
-    var parent = jQuery(this).parent(),
-        clone = parent.prev().clone(),
-        total = parent.parent().find('input[name$=\'TOTAL_FORMS\']');
-    incrementTotalForms(total);
-    incrementClone(clone);
-    removeCloneId(clone);
-    parent.before(clone);
+    jQuery('div.goal-panel, div.card-panel').each(function(){
+        var panel = jQuery(this);
+        if (panel.find('div.delete-checkbox input').is(':checked')){
+            panel.addClass('greyed-out');
+        }
+    });
+
 });
 {% endblock %}

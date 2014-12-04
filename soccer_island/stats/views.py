@@ -6,8 +6,9 @@ from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView, ListView, DetailView
 
 from stats.forms import (GameUpdateForm, GamePlayedUpdateForm,
-                            GoalInlineFormSet, GoalInlineFormSetHelper)
-from stats.models import Season, Team, PlayFor, Matchday, Game, Goal
+                            GoalInlineFormSet, GoalInlineFormSetHelper,
+                                CardInlineFormSet, CardInlineFormSetHelper)
+from stats.models import Season, Team, PlayFor, Matchday, Game, Goal, Card
 
 
 def login_view(request):
@@ -52,6 +53,12 @@ def update_game_view(request, pk):
         formset=GoalInlineFormSet,
         extra=1
     )
+    CardFormSet = inlineformset_factory(
+        Game,
+        Card,
+        formset=CardInlineFormSet,
+        extra=1
+    )
 
     if request.method == 'POST':
         form = GameUpdateForm(request.POST, instance=game)
@@ -64,15 +71,18 @@ def update_game_view(request, pk):
             instance=game,
             prefix='away_goal'
         )
+        card_formset = CardFormSet(request.POST, instance=game)
         if form.is_valid()\
             and form_played.is_valid()\
             and home_goal_formset.is_valid()\
-            and away_goal_formset.is_valid():
+            and away_goal_formset.is_valid()\
+            and card_formset.is_valid():
 
             form.save()
             form_played.save()
             home_goal_formset.save()
             away_goal_formset.save()
+            card_formset.save()
             return HttpResponseRedirect(game.get_absolute_url())
 
     else:
@@ -100,6 +110,12 @@ def update_game_view(request, pk):
                 'DELETE': True,
             }]
         )
+        card_formset = CardFormSet(
+            instance = game,
+            initial = [{
+                'DELETE': True,
+            }]
+        )
 
     context = {
         'form': form,
@@ -107,6 +123,8 @@ def update_game_view(request, pk):
         'home_goal_formset': home_goal_formset,
         'away_goal_formset': away_goal_formset,
         'goal_formset_helper': GoalInlineFormSetHelper(),
+        'card_formset': card_formset,
+        'card_formset_helper': CardInlineFormSetHelper(),
         'game': game
     }
 

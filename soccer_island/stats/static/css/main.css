@@ -4,6 +4,9 @@ body {
 .img-center {
   margin: 0 auto;
 }
+.tab-content {
+  padding-top: 10px;
+}
 table.com-soccerisland--roster tr td:first-child,
 table.com-soccerisland--roster tr th:first-child {
   border-left-width: 5px;
@@ -87,4 +90,7 @@ div.delete-checkbox div.form-group, div.delete-checkbox div.checkbox {
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
+}
+.greyed-out {
+    opacity: 0.5
 }

@@ -32,6 +32,35 @@ class GamePlayedUpdateForm(forms.ModelForm):
         self.helper.form_tag = False
 
 
+class GoalInlineFormSet(BaseInlineFormSet):
+
+    def __init__(self, *args, **kwargs):
+        super(GoalInlineFormSet, self).__init__(*args, **kwargs)
+
+        for form in self.forms:
+
+            form.fields['scored_by'].queryset = PlayFor.objects.\
+                filter(
+                    Q(team__home=self.instance) | Q(team__away=self.instance),
+                    from_date__lte=self.instance.date,
+                ).exclude(
+                    to_date__lt=self.instance.date,
+                ).select_related(
+                    'player__person',
+                    'team',
+                ).distinct()
+            form.fields['assisted_by'].queryset = PlayFor.objects.\
+                filter(
+                    Q(team__home=self.instance) | Q(team__away=self.instance),
+                    from_date__lte=self.instance.date,
+                ).exclude(
+                    to_date__lt=self.instance.date,
+                ).select_related(
+                    'player__person',
+                    'team',
+                ).distinct()
+
+
 class GoalInlineFormSetHelper(FormHelper):
 
     def __init__(self, *args, **kwargs):
@@ -71,20 +100,20 @@ class GoalInlineFormSetHelper(FormHelper):
                     ),
                     css_class='list-group delete-checkbox'
                 ),
-                css_class='panel panel-default'
+                css_class='goal-panel panel panel-default'
             )
         )
         self.render_required_fields = False
 
 
-class GoalInlineFormSet(BaseInlineFormSet):
+class CardInlineFormSet(BaseInlineFormSet):
 
     def __init__(self, *args, **kwargs):
-        super(GoalInlineFormSet, self).__init__(*args, **kwargs)
+        super(CardInlineFormSet, self).__init__(*args, **kwargs)
 
         for form in self.forms:
 
-            form.fields['scored_by'].queryset = PlayFor.objects.\
+            form.fields['play_for'].queryset = PlayFor.objects.\
                 filter(
                     Q(team__home=self.instance) | Q(team__away=self.instance),
                     from_date__lte=self.instance.date,
@@ -94,13 +123,45 @@ class GoalInlineFormSet(BaseInlineFormSet):
                     'player__person',
                     'team',
                 ).distinct()
-            form.fields['assisted_by'].queryset = PlayFor.objects.\
-                filter(
-                    Q(team__home=self.instance) | Q(team__away=self.instance),
-                    from_date__lte=self.instance.date,
-                ).exclude(
-                    to_date__lt=self.instance.date,
-                ).select_related(
-                    'player__person',
-                    'team',
-                ).distinct()
+
+
+class CardInlineFormSetHelper(FormHelper):
+
+    def __init__(self, *args, **kwargs):
+        super(CardInlineFormSetHelper, self).__init__(*args, **kwargs)
+        self.form_tag = False
+        self.layout = Layout(
+            Div(
+                Div(
+                    'in_game',
+                    Field('id', type="hidden", css_class="element-id"),
+                    Div(
+                        Div(
+                            Field('play_for', css_class='input-sm'),
+                        ),
+                        Div(
+                            Div(
+                                Field('color', css_class='input-sm'),
+                                css_class='col-md-6'
+                            ),
+                            Div(
+                                Field('minute', css_class='input-sm'),
+                                css_class='col-md-6'
+                            ),
+                            css_class='row'
+                        ),
+                        css_class='panel-body'
+                    ),
+                    Div(
+                        Div(
+                            Field('DELETE'),
+                            css_class='list-group-item'
+                        ),
+                        css_class='list-group delete-checkbox'
+                    ),
+                    css_class='card-panel panel panel-default'
+                ),
+                css_class='col-md-6'
+            )
+        )
+        self.render_required_fields = False
