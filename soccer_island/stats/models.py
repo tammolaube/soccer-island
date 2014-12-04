@@ -495,14 +495,24 @@ class Season(models.Model):
         last_matchday = Matchday.objects.filter(
             season=self,
             date__lt=(datetime.date.today())
-        ).order_by('-date').\
-            prefetch_related('games__home_team', 'games__away_team', 'games__field')[:1][0]
+        ).order_by('-date')[:1].\
+            prefetch_related('games__home_team', 'games__away_team', 'games__field')
 
         next_matchday = Matchday.objects.filter(
             season=self,
             date__gte=(datetime.date.today())
-        ).order_by('date').\
-            prefetch_related('games__home_team', 'games__away_team', 'games__field')[:1][0]
+        ).order_by('date')[:1].\
+            prefetch_related('games__home_team', 'games__away_team', 'games__field')
+
+        try:
+            last_matchday = last_matchday[0]
+        except IndexError:
+            last_matchday = 'null'
+
+        try:
+            next_matchday = next_matchday[0]
+        except IndexError:
+            next_matchday = 'null'
 
         return (last_matchday, next_matchday,)
 
