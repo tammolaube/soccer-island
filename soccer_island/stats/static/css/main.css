@@ -49,6 +49,10 @@ div.delete-checkbox div.form-group, div.delete-checkbox div.checkbox {
   margin-top: 0;
   margin-bottom: 0;
 }
+p.signed-in {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
 .form-signin
 {
     max-width: 330px;

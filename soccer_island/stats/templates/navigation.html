@@ -65,12 +65,12 @@
       </ul>
       <div class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
-          <p class="navbar-text">
+          <p class="navbar-text signed-in">
             Signed in as {{ user }}
+            <a href="{% url 'logout' %}?next={{ request.get_full_path }}" type="button" class="btn btn-danger navbar-btn">
+              Sign out
+            </a>
           </p>
-          <a href="{% url 'logout' %}?next={{ request.get_full_path }}" type="button" class="btn btn-danger navbar-btn">
-            Sign out
-          </a>
         {% else %}
           <p class="navbar-text">
           <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="navbar-link">
