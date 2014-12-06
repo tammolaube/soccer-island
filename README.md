@@ -54,3 +54,22 @@ This system will be a web application and be accessible over the Internet. We wi
 
 #### SQL Migration Statements
 To see the generated SQL Statements click on this link: [Sql Migrations](docs/create_database.sql).
+
+## Install (Development)
+Instructions to install and run soccer-island for developing or testing it. This does not cover deployment into
+an procduction environment.
+
+#### Prerequisites
+- Python 2.7 with (virtualenv) and pip
+- MySQL Server 5.5
+ - create a database 'soccer_island'
+ - create a user 'django' identified by 'soccer' with all privileges on the database 'soccer_island'
+ - load the file docs/dump.sql into the created 'soccer_island' database
+- (git)
+
+#### Process
+Use git to download the repository, or manually download the repository as zip and extract it.
+(Create a virtual python environment with virtualenv.) 
+Use the tool pip together with the file docs/requirements.txt, to install all requirements for this project into the python environment.
+Start the development server, by executing the file soccer_island/manage.py via terminal command 'pyhton manage.py runserver'.
+The development server is now running on localhost.
