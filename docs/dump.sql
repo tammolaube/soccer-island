@@ -127,7 +127,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$cukQgoLWkKus$a9mzUqgDSvPGlmzQpNLgREtDE8Jq1A1sArNiXA9Thrg=','2014-11-23 23:22:36',1,'root','','','r@root.com',1,1,'2014-11-13 07:45:21');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$12000$cukQgoLWkKus$a9mzUqgDSvPGlmzQpNLgREtDE8Jq1A1sArNiXA9Thrg=','2014-12-06 03:35:04',1,'root','','','r@root.com',1,1,'2014-11-13 07:45:21');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -210,7 +210,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_e8701ad4` (`user_id`),
   CONSTRAINT `django_admin_log_user_id_52fdd58701c5f563_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   CONSTRAINT `djang_content_type_id_697914295151027a_fk_django_content_type_id` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,7 +219,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2014-11-13 07:56:27','1','Legends',1,'',7,1),(2,'2014-11-13 07:57:08','2','Men\'s Open',1,'',7,1),(3,'2014-11-13 07:57:23','1','Men\'s Open Legends of Football',1,'',19,1),(4,'2014-11-13 07:58:25','1','Team 1970s',1,'',13,1),(5,'2014-11-13 07:58:45','2','Team 1980s',1,'',13,1),(6,'2014-11-13 07:59:06','3','Team 1990s',1,'',13,1),(7,'2014-11-13 07:59:24','4','Team 2000s',1,'',13,1),(8,'2014-11-13 07:59:33','1','Men\'s Open Legends of Football - 2014-2015',1,'',20,1),(9,'2014-11-13 08:00:08','1','Matchday1',1,'',21,1),(10,'2014-11-13 08:00:37','2','Matchday 2',1,'',21,1),(11,'2014-11-13 08:01:51','1','Waipio Soccer Complex: Field 1',1,'',18,1),(12,'2014-11-13 08:02:04','1','Team 1980s vs Team 1970s (2014-09-01 12:00:00-10:00)',1,'',23,1),(13,'2014-11-13 08:02:33','2','Team 2000s vs Team 1990s (2014-09-01 12:00:00-10:00)',1,'',23,1),(14,'2014-11-13 08:02:58','3','Team 1990s vs Team 1970s (2014-12-01 12:00:00-10:00)',1,'',23,1),(15,'2014-11-13 08:03:22','4','Team 2000s vs Team 1980s (2014-12-01 12:00:00-10:00)',1,'',23,1),(16,'2014-11-13 08:04:04','1','Franz Beckenbauer at Team 1970s',1,'',12,1),(17,'2014-11-13 08:04:23','2','Diego Maradona at Team 1980s',1,'',12,1),(18,'2014-11-13 08:04:47','3','Edson do Nascimento at Team 1970s',1,'',12,1),(19,'2014-11-13 08:05:07','4','Johan Cruijff at Team 1970s',1,'',12,1),(20,'2014-11-13 08:05:25','5','Lionel Messi at Team 2000s',1,'',12,1),(21,'2014-11-13 08:05:47','6','Ronaldo de Lima at Team 1990s',1,'',12,1),(22,'2014-11-13 08:06:04','7','Zinedine Zidane at Team 2000s',1,'',12,1),(23,'2014-11-13 08:06:23','8','Marco van Basten at Team 1990s',1,'',12,1),(24,'2014-11-13 08:06:41','9','Michael Laudrup at Team 1990s',1,'',12,1),(25,'2014-11-13 08:06:59','10','Eric Cantona at Team 1990s',1,'',12,1),(26,'2014-11-13 08:07:12','11','Thierry Henry at Team 2000s',1,'',12,1),(27,'2014-11-13 08:07:29','12','Lothar Matthäus at Team 1990s',1,'',12,1),(28,'2014-11-13 08:07:50','13','Francesco Totti at Team 2000s',1,'',12,1),(29,'2014-11-13 08:08:05','14','George Best at Team 1970s',1,'',12,1),(30,'2014-11-13 08:08:21','15','Eusébio da Silva Ferreira at Team 1970s',1,'',12,1),(31,'2014-11-13 08:08:36','16','Oliver Kahn at Team 2000s',1,'',12,1),(32,'2014-11-13 08:08:51','17','Peter Schmeichel at Team 1990s',1,'',12,1),(33,'2014-11-13 08:09:04','18','Roberto Carlos at Team 2000s',1,'',12,1),(34,'2014-11-13 08:09:28','3','Edson do Nascimento at Team 1970s',2,'Changed number.',12,1),(35,'2014-11-13 08:09:38','15','Eusébio da Silva Ferreira at Team 1970s',2,'Changed number.',12,1),(36,'2014-11-13 08:09:55','5','Lionel Messi at Team 2000s',2,'Changed number.',12,1),(37,'2014-11-13 08:11:12','2','Team 2000s vs Team 1990s (2014-09-01 12:00:00-10:00)',2,'Changed played.',23,1),(38,'2014-11-13 08:12:37','14','George Best',2,'Changed position.',14,1),(39,'2014-11-13 08:12:44','12','Lothar Matthäus',2,'Changed position.',14,1),(40,'2014-11-13 08:13:44','11','Thierry Henry',2,'Changed position.',14,1),(41,'2014-11-13 08:14:05','14','George Best',2,'No fields changed.',14,1),(42,'2014-11-13 08:14:13','15','Eusébio da Silva Ferreira',2,'Changed position.',14,1),(43,'2014-11-13 08:14:58','5','Lionel Messi at Team 2000s',2,'Changed number.',12,1),(44,'2014-11-13 08:16:22','1','Franz Beckenbauer Team 1990s',1,'',16,1),(45,'2014-11-13 08:16:52','2','Jose Mourinho Team 2000s',1,'',16,1),(46,'2014-11-13 08:17:07','1','Franz Beckenbauer Team 1980s',2,'Changed team.',16,1),(47,'2014-11-13 08:17:25','3','Johan Cruijff Team 1990s',1,'',16,1),(48,'2014-11-13 08:17:41','4','Ottmar Hitzfeld Team 1970s',1,'',16,1),(49,'2014-11-13 08:18:26','2','Jose Mourinho Team 2000s',2,'Changed responsibility.',16,1),(50,'2014-11-13 08:18:46','5','Ottmar Hitzfeld Team 2000s',1,'',16,1),(51,'2014-11-13 08:19:03','5','Ottmar Hitzfeld Team 2000s',2,'Changed responsibility.',16,1),(52,'2014-11-13 08:35:19','1','Y Card (Nonemin)',1,'',24,1),(53,'2014-11-13 08:35:44','2','R Card (Nonemin)',1,'',24,1),(54,'2014-11-13 08:36:10','3','Y Card (Nonemin)',1,'',24,1),(55,'2014-11-13 08:36:27','4','Y Card (Nonemin)',1,'',24,1),(56,'2014-11-13 08:38:10','3','R Card (Nonemin)',2,'Changed color.',24,1),(57,'2014-11-13 23:14:58','1','Team 1980s vs Team 1970s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(58,'2014-11-13 23:15:29','2','Team 1980s vs Team 1970s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(59,'2014-11-13 23:15:51','3','Team 1980s vs Team 1970s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(60,'2014-11-13 23:16:02','4','Team 1980s vs Team 1970s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(61,'2014-11-13 23:16:47','5','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(62,'2014-11-13 23:17:13','6','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(63,'2014-11-13 23:17:37','7','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(64,'2014-11-13 23:18:08','8','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(65,'2014-11-13 23:18:36','9','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(66,'2014-11-14 01:47:51','2','Matchday 3',2,'Changed label.',21,1),(67,'2014-11-14 01:48:07','3','Matchday 2',1,'',21,1),(68,'2014-11-14 01:48:57','5','Team 1970s vs Team 2000s (2014-10-15 12:00:00-10:00)',1,'',23,1),(69,'2014-11-14 01:49:28','6','Team 1980s vs Team 1990s (2014-10-15 12:00:00-10:00)',1,'',23,1),(70,'2014-11-14 01:50:34','8','Marco van Basten at Team 1990s',2,'Changed to_date.',12,1),(71,'2014-11-14 01:51:04','19','Marco van Basten at Team 1980s',1,'',12,1),(72,'2014-11-15 22:47:25','1','Eric Cantona 2014-11-01',1,'',9,1),(73,'2014-11-15 23:07:00','2','Legends Cup (Men\'s Open)',1,'',19,1),(74,'2014-11-15 23:08:12','2','2014-2015 Legends Cup (Men\'s Open)',1,'',20,1),(75,'2014-11-15 23:09:14','4','Semi-finals',1,'',21,1),(76,'2014-11-15 23:09:56','5','Final',1,'',21,1),(77,'2014-11-15 23:11:08','7','Team 1980s vs Team 1970s (2014-11-01 12:00:00-10:00)',1,'',23,1),(78,'2014-11-15 23:11:33','8','Team 2000s vs Team 1990s (2014-11-01 12:00:00-10:00)',1,'',23,1),(79,'2014-11-15 23:12:28','9','Team 1990s vs Team 1970s (2015-05-01 12:00:00-10:00)',1,'',23,1),(80,'2014-11-15 23:32:22','2','Men\'s Open',2,'Changed slug.',7,1),(81,'2014-11-16 02:43:19','1','Legends',3,'',7,1),(82,'2014-11-17 01:55:58','1','Team 1980s vs Team 1970s (2014-09-01 12:00:00-10:00)',2,'Changed scored_by for goal \"Team 1980s vs Team 1970s (2014-09-01 12:00:00-10:00) Nonemin\".',23,1),(83,'2014-11-22 00:08:09','1','2014-2015 Legends of Football (Men\'s Open)',2,'Changed published.',20,1),(84,'2014-11-23 23:23:11','1','Eric Cantona 2014-11-01',2,'Changed suspended_until and reason.',9,1),(85,'2014-11-23 23:39:02','1','Eric Cantona 2014-11-01',2,'Changed competition.',9,1),(86,'2014-11-23 23:52:00','1','Eric Cantona 2014-11-01',2,'Changed competition.',9,1),(87,'2014-11-23 23:53:41','1','Eric Cantona 2014-11-01',2,'No fields changed.',9,1),(88,'2014-11-23 23:56:26','1','Eric Cantona 2014-11-01',2,'Changed fine.',9,1),(89,'2014-11-24 00:06:27','1','Eric Cantona 2014-11-01',2,'Changed fine_paid.',9,1),(90,'2014-12-04 19:22:41','6','Matchday 4',1,'',21,1);
+INSERT INTO `django_admin_log` VALUES (1,'2014-11-13 07:56:27','1','Legends',1,'',7,1),(2,'2014-11-13 07:57:08','2','Men\'s Open',1,'',7,1),(3,'2014-11-13 07:57:23','1','Men\'s Open Legends of Football',1,'',19,1),(4,'2014-11-13 07:58:25','1','Team 1970s',1,'',13,1),(5,'2014-11-13 07:58:45','2','Team 1980s',1,'',13,1),(6,'2014-11-13 07:59:06','3','Team 1990s',1,'',13,1),(7,'2014-11-13 07:59:24','4','Team 2000s',1,'',13,1),(8,'2014-11-13 07:59:33','1','Men\'s Open Legends of Football - 2014-2015',1,'',20,1),(9,'2014-11-13 08:00:08','1','Matchday1',1,'',21,1),(10,'2014-11-13 08:00:37','2','Matchday 2',1,'',21,1),(11,'2014-11-13 08:01:51','1','Waipio Soccer Complex: Field 1',1,'',18,1),(12,'2014-11-13 08:02:04','1','Team 1980s vs Team 1970s (2014-09-01 12:00:00-10:00)',1,'',23,1),(13,'2014-11-13 08:02:33','2','Team 2000s vs Team 1990s (2014-09-01 12:00:00-10:00)',1,'',23,1),(14,'2014-11-13 08:02:58','3','Team 1990s vs Team 1970s (2014-12-01 12:00:00-10:00)',1,'',23,1),(15,'2014-11-13 08:03:22','4','Team 2000s vs Team 1980s (2014-12-01 12:00:00-10:00)',1,'',23,1),(16,'2014-11-13 08:04:04','1','Franz Beckenbauer at Team 1970s',1,'',12,1),(17,'2014-11-13 08:04:23','2','Diego Maradona at Team 1980s',1,'',12,1),(18,'2014-11-13 08:04:47','3','Edson do Nascimento at Team 1970s',1,'',12,1),(19,'2014-11-13 08:05:07','4','Johan Cruijff at Team 1970s',1,'',12,1),(20,'2014-11-13 08:05:25','5','Lionel Messi at Team 2000s',1,'',12,1),(21,'2014-11-13 08:05:47','6','Ronaldo de Lima at Team 1990s',1,'',12,1),(22,'2014-11-13 08:06:04','7','Zinedine Zidane at Team 2000s',1,'',12,1),(23,'2014-11-13 08:06:23','8','Marco van Basten at Team 1990s',1,'',12,1),(24,'2014-11-13 08:06:41','9','Michael Laudrup at Team 1990s',1,'',12,1),(25,'2014-11-13 08:06:59','10','Eric Cantona at Team 1990s',1,'',12,1),(26,'2014-11-13 08:07:12','11','Thierry Henry at Team 2000s',1,'',12,1),(27,'2014-11-13 08:07:29','12','Lothar Matthäus at Team 1990s',1,'',12,1),(28,'2014-11-13 08:07:50','13','Francesco Totti at Team 2000s',1,'',12,1),(29,'2014-11-13 08:08:05','14','George Best at Team 1970s',1,'',12,1),(30,'2014-11-13 08:08:21','15','Eusébio da Silva Ferreira at Team 1970s',1,'',12,1),(31,'2014-11-13 08:08:36','16','Oliver Kahn at Team 2000s',1,'',12,1),(32,'2014-11-13 08:08:51','17','Peter Schmeichel at Team 1990s',1,'',12,1),(33,'2014-11-13 08:09:04','18','Roberto Carlos at Team 2000s',1,'',12,1),(34,'2014-11-13 08:09:28','3','Edson do Nascimento at Team 1970s',2,'Changed number.',12,1),(35,'2014-11-13 08:09:38','15','Eusébio da Silva Ferreira at Team 1970s',2,'Changed number.',12,1),(36,'2014-11-13 08:09:55','5','Lionel Messi at Team 2000s',2,'Changed number.',12,1),(37,'2014-11-13 08:11:12','2','Team 2000s vs Team 1990s (2014-09-01 12:00:00-10:00)',2,'Changed played.',23,1),(38,'2014-11-13 08:12:37','14','George Best',2,'Changed position.',14,1),(39,'2014-11-13 08:12:44','12','Lothar Matthäus',2,'Changed position.',14,1),(40,'2014-11-13 08:13:44','11','Thierry Henry',2,'Changed position.',14,1),(41,'2014-11-13 08:14:05','14','George Best',2,'No fields changed.',14,1),(42,'2014-11-13 08:14:13','15','Eusébio da Silva Ferreira',2,'Changed position.',14,1),(43,'2014-11-13 08:14:58','5','Lionel Messi at Team 2000s',2,'Changed number.',12,1),(44,'2014-11-13 08:16:22','1','Franz Beckenbauer Team 1990s',1,'',16,1),(45,'2014-11-13 08:16:52','2','Jose Mourinho Team 2000s',1,'',16,1),(46,'2014-11-13 08:17:07','1','Franz Beckenbauer Team 1980s',2,'Changed team.',16,1),(47,'2014-11-13 08:17:25','3','Johan Cruijff Team 1990s',1,'',16,1),(48,'2014-11-13 08:17:41','4','Ottmar Hitzfeld Team 1970s',1,'',16,1),(49,'2014-11-13 08:18:26','2','Jose Mourinho Team 2000s',2,'Changed responsibility.',16,1),(50,'2014-11-13 08:18:46','5','Ottmar Hitzfeld Team 2000s',1,'',16,1),(51,'2014-11-13 08:19:03','5','Ottmar Hitzfeld Team 2000s',2,'Changed responsibility.',16,1),(52,'2014-11-13 08:35:19','1','Y Card (Nonemin)',1,'',24,1),(53,'2014-11-13 08:35:44','2','R Card (Nonemin)',1,'',24,1),(54,'2014-11-13 08:36:10','3','Y Card (Nonemin)',1,'',24,1),(55,'2014-11-13 08:36:27','4','Y Card (Nonemin)',1,'',24,1),(56,'2014-11-13 08:38:10','3','R Card (Nonemin)',2,'Changed color.',24,1),(57,'2014-11-13 23:14:58','1','Team 1980s vs Team 1970s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(58,'2014-11-13 23:15:29','2','Team 1980s vs Team 1970s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(59,'2014-11-13 23:15:51','3','Team 1980s vs Team 1970s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(60,'2014-11-13 23:16:02','4','Team 1980s vs Team 1970s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(61,'2014-11-13 23:16:47','5','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(62,'2014-11-13 23:17:13','6','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(63,'2014-11-13 23:17:37','7','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(64,'2014-11-13 23:18:08','8','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(65,'2014-11-13 23:18:36','9','Team 2000s vs Team 1990s (2014-09-01 22:00:00+00:00) Nonemin',1,'',22,1),(66,'2014-11-14 01:47:51','2','Matchday 3',2,'Changed label.',21,1),(67,'2014-11-14 01:48:07','3','Matchday 2',1,'',21,1),(68,'2014-11-14 01:48:57','5','Team 1970s vs Team 2000s (2014-10-15 12:00:00-10:00)',1,'',23,1),(69,'2014-11-14 01:49:28','6','Team 1980s vs Team 1990s (2014-10-15 12:00:00-10:00)',1,'',23,1),(70,'2014-11-14 01:50:34','8','Marco van Basten at Team 1990s',2,'Changed to_date.',12,1),(71,'2014-11-14 01:51:04','19','Marco van Basten at Team 1980s',1,'',12,1),(72,'2014-11-15 22:47:25','1','Eric Cantona 2014-11-01',1,'',9,1),(73,'2014-11-15 23:07:00','2','Legends Cup (Men\'s Open)',1,'',19,1),(74,'2014-11-15 23:08:12','2','2014-2015 Legends Cup (Men\'s Open)',1,'',20,1),(75,'2014-11-15 23:09:14','4','Semi-finals',1,'',21,1),(76,'2014-11-15 23:09:56','5','Final',1,'',21,1),(77,'2014-11-15 23:11:08','7','Team 1980s vs Team 1970s (2014-11-01 12:00:00-10:00)',1,'',23,1),(78,'2014-11-15 23:11:33','8','Team 2000s vs Team 1990s (2014-11-01 12:00:00-10:00)',1,'',23,1),(79,'2014-11-15 23:12:28','9','Team 1990s vs Team 1970s (2015-05-01 12:00:00-10:00)',1,'',23,1),(80,'2014-11-15 23:32:22','2','Men\'s Open',2,'Changed slug.',7,1),(81,'2014-11-16 02:43:19','1','Legends',3,'',7,1),(82,'2014-11-17 01:55:58','1','Team 1980s vs Team 1970s (2014-09-01 12:00:00-10:00)',2,'Changed scored_by for goal \"Team 1980s vs Team 1970s (2014-09-01 12:00:00-10:00) Nonemin\".',23,1),(83,'2014-11-22 00:08:09','1','2014-2015 Legends of Football (Men\'s Open)',2,'Changed published.',20,1),(84,'2014-11-23 23:23:11','1','Eric Cantona 2014-11-01',2,'Changed suspended_until and reason.',9,1),(85,'2014-11-23 23:39:02','1','Eric Cantona 2014-11-01',2,'Changed competition.',9,1),(86,'2014-11-23 23:52:00','1','Eric Cantona 2014-11-01',2,'Changed competition.',9,1),(87,'2014-11-23 23:53:41','1','Eric Cantona 2014-11-01',2,'No fields changed.',9,1),(88,'2014-11-23 23:56:26','1','Eric Cantona 2014-11-01',2,'Changed fine.',9,1),(89,'2014-11-24 00:06:27','1','Eric Cantona 2014-11-01',2,'Changed fine_paid.',9,1),(90,'2014-12-04 19:22:41','6','Matchday 4',1,'',21,1),(91,'2014-12-06 02:19:39','1','Matchday 1',2,'Changed label.',21,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,7 +298,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('43twt3uiyx7o18jkrx9z6qsx9egqehya','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-07 21:22:42'),('4fjscgmbn33bir3ubywd30i404cq864s','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-07 22:08:16'),('8f5ckv6qm987dhew526aokxat4sd20sj','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-04 06:31:10'),('9atks63ky8f3cz1l345x41fdt96yf0jc','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-18 19:23:23'),('ea2xhu5522dtp1imlz9u4ry449ty72e6','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-04 06:18:31'),('spk71nwpgeel092pthfuzdqo42q5vjmf','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-07 21:34:23'),('y9vfefde8j8ey1dnx0v4l678h5u4rcz3','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-04 21:52:27');
+INSERT INTO `django_session` VALUES ('43twt3uiyx7o18jkrx9z6qsx9egqehya','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-07 21:22:42'),('4fjscgmbn33bir3ubywd30i404cq864s','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-07 22:08:16'),('8f5ckv6qm987dhew526aokxat4sd20sj','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-04 06:31:10'),('9atks63ky8f3cz1l345x41fdt96yf0jc','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-18 19:23:23'),('ea2xhu5522dtp1imlz9u4ry449ty72e6','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-04 06:18:31'),('msdu6h1siqg0x6s52x44swcgh4kn5b7t','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-20 03:37:13'),('spk71nwpgeel092pthfuzdqo42q5vjmf','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-07 21:34:23'),('y9vfefde8j8ey1dnx0v4l678h5u4rcz3','ZTc0OTY2ZmM2NmFhNWUwMTNjZTc2NWMzZjk3NmE0NWYxMGRlNzljODp7fQ==','2014-12-04 21:52:27');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -340,16 +340,16 @@ DROP TABLE IF EXISTS `stats_card`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stats_card` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `minute` smallint(6),
+  `minute` smallint(6) DEFAULT NULL,
   `color` varchar(1) NOT NULL,
-  `in_game_id` int(11),
+  `in_game_id` int(11) DEFAULT NULL,
   `play_for_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `stats_card_def6ee40` (`in_game_id`),
   KEY `stats_card_2db86204` (`play_for_id`),
   CONSTRAINT `stats_card_in_game_id_29b040e7f6b9da35_fk_stats_game_id` FOREIGN KEY (`in_game_id`) REFERENCES `stats_game` (`id`),
   CONSTRAINT `stats_card_play_for_id_658a5787a55d7698_fk_stats_playfor_id` FOREIGN KEY (`play_for_id`) REFERENCES `stats_playfor` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -358,7 +358,7 @@ CREATE TABLE `stats_card` (
 
 LOCK TABLES `stats_card` WRITE;
 /*!40000 ALTER TABLE `stats_card` DISABLE KEYS */;
-INSERT INTO `stats_card` VALUES (1,NULL,'Y',1,1),(2,NULL,'R',2,7),(3,NULL,'R',2,10),(4,NULL,'Y',2,10);
+INSERT INTO `stats_card` VALUES (1,67,'Y',1,1),(2,NULL,'R',2,7),(3,NULL,'R',2,10),(4,NULL,'Y',2,10),(5,3,'Y',1,4);
 /*!40000 ALTER TABLE `stats_card` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -403,6 +403,7 @@ CREATE TABLE `stats_club` (
   `address_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`),
+  UNIQUE KEY `stats_club_name_5c260801f34a1886_uniq` (`name`),
   KEY `stats_club_ea8e5d12` (`address_id`),
   CONSTRAINT `stats_club_address_id_6846fe0254819089_fk_stats_address_id` FOREIGN KEY (`address_id`) REFERENCES `stats_address` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -454,7 +455,7 @@ CREATE TABLE `stats_coachfor` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `from_date` date NOT NULL,
   `to_date` date DEFAULT NULL,
-  `responsibility` varchar(1),
+  `responsibility` varchar(1) DEFAULT NULL,
   `coach_id` int(11) NOT NULL,
   `team_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -544,15 +545,15 @@ DROP TABLE IF EXISTS `stats_game`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stats_game` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date` datetime,
+  `date` datetime DEFAULT NULL,
   `name` varchar(64) NOT NULL,
-  `away_team_id` int(11),
+  `away_team_id` int(11) DEFAULT NULL,
   `field_id` int(11) NOT NULL,
-  `home_team_id` int(11),
+  `home_team_id` int(11) DEFAULT NULL,
   `matchday_id` int(11) NOT NULL,
-  `next_game_id` int(11),
-  `referee_id` int(11),
-  `played` tinyint(1),
+  `next_game_id` int(11) DEFAULT NULL,
+  `referee_id` int(11) DEFAULT NULL,
+  `played` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `stats_game_901b4047` (`away_team_id`),
   KEY `stats_game_3aabf39f` (`field_id`),
@@ -588,11 +589,11 @@ DROP TABLE IF EXISTS `stats_goal`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stats_goal` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `minute` varchar(6) NOT NULL,
-  `assisted_by_id` int(11),
-  `scored_by_id` int(11),
+  `minute` smallint(6) DEFAULT NULL,
+  `assisted_by_id` int(11) DEFAULT NULL,
+  `scored_by_id` int(11) DEFAULT NULL,
   `scored_for_id` int(11) NOT NULL,
-  `game_id` int(11),
+  `game_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `stats_goal_fbf76cfd` (`assisted_by_id`),
   KEY `stats_goal_75a7163c` (`scored_by_id`),
@@ -611,7 +612,7 @@ CREATE TABLE `stats_goal` (
 
 LOCK TABLES `stats_goal` WRITE;
 /*!40000 ALTER TABLE `stats_goal` DISABLE KEYS */;
-INSERT INTO `stats_goal` VALUES (1,'30',4,3,1,1),(2,'90+3',1,3,1,1),(3,'23',NULL,2,2,1),(4,'73',NULL,2,2,1),(5,'',7,11,4,2),(6,'',18,7,4,2),(7,'',7,13,4,2),(8,'',10,8,3,2),(9,'',9,6,3,2),(11,'',2,19,2,6),(34,'',9,6,3,6),(43,'',NULL,2,2,6),(44,'',NULL,2,2,6),(45,'',NULL,6,3,3),(46,'',NULL,2,2,1);
+INSERT INTO `stats_goal` VALUES (1,30,4,3,1,1),(2,90,1,3,1,1),(3,23,NULL,2,2,1),(4,73,NULL,2,2,1),(5,0,7,11,4,2),(6,0,18,7,4,2),(7,0,7,13,4,2),(8,0,10,8,3,2),(9,0,9,6,3,2),(11,0,2,19,2,6),(34,0,9,6,3,6),(43,0,NULL,2,2,6),(44,0,NULL,2,2,6),(45,0,NULL,6,3,3),(46,3,NULL,2,2,1);
 /*!40000 ALTER TABLE `stats_goal` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -624,7 +625,7 @@ DROP TABLE IF EXISTS `stats_matchday`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stats_matchday` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `slug` varchar(32),
+  `slug` varchar(32) DEFAULT NULL,
   `season_id` int(11) NOT NULL,
   `date` date NOT NULL,
   `label` varchar(32) NOT NULL,
@@ -641,7 +642,7 @@ CREATE TABLE `stats_matchday` (
 
 LOCK TABLES `stats_matchday` WRITE;
 /*!40000 ALTER TABLE `stats_matchday` DISABLE KEYS */;
-INSERT INTO `stats_matchday` VALUES (1,'matchday1',1,'2014-09-01','Matchday1'),(2,'matchday-3',1,'2014-12-01','Matchday 3'),(3,'matchday-2',1,'2014-10-15','Matchday 2'),(4,'semi-finals',2,'2014-11-01','Semi-finals'),(5,'final',2,'2015-05-01','Final'),(6,'matchday-4',1,'2015-02-01','Matchday 4');
+INSERT INTO `stats_matchday` VALUES (1,'matchday-1',1,'2014-09-01','Matchday 1'),(2,'matchday-3',1,'2014-12-01','Matchday 3'),(3,'matchday-2',1,'2014-10-15','Matchday 2'),(4,'semi-finals',2,'2014-11-01','Semi-finals'),(5,'final',2,'2015-05-01','Final'),(6,'matchday-4',1,'2015-02-01','Matchday 4');
 /*!40000 ALTER TABLE `stats_matchday` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -718,7 +719,7 @@ CREATE TABLE `stats_playfor` (
   `player_id` int(11) NOT NULL,
   `team_id` int(11) NOT NULL,
   `injury_reserve` tinyint(1) NOT NULL,
-  `number` smallint(6),
+  `number` smallint(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `stats_playfor_afe72417` (`player_id`),
   KEY `stats_playfor_f6a7ca40` (`team_id`),
@@ -772,7 +773,7 @@ DROP TABLE IF EXISTS `stats_season`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stats_season` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `label` varchar(9),
+  `label` varchar(9) DEFAULT NULL,
   `slug` varchar(9) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
@@ -834,13 +835,13 @@ DROP TABLE IF EXISTS `stats_suspension`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stats_suspension` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date_received` date,
-  `suspended_until` date,
+  `date_received` date DEFAULT NULL,
+  `suspended_until` date DEFAULT NULL,
   `reason` varchar(1024) NOT NULL,
   `fine` smallint(6) NOT NULL,
   `fine_paid` tinyint(1) NOT NULL,
   `player_id` int(11) NOT NULL,
-  `competition_id` int(11),
+  `competition_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `stats_suspension_afe72417` (`player_id`),
   KEY `stats_suspension_88606bbe` (`competition_id`),
@@ -901,4 +902,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-12-04  9:29:23
+-- Dump completed on 2014-12-05 17:39:02
