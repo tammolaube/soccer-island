@@ -41,7 +41,7 @@ urlpatterns = patterns('',
     ),
     url(r'^schedule/' + REGEX_CLASSIFICATION_COMPETITION_SEASON,
         views.MatchdayListView.as_view(),
-        name='matchdays'
+        name='schedule'
     ),
     url(r'^disciplinary/' + REGEX_CLASSIFICATION_COMPETITION_SEASON,
         views.DisciplinaryListView.as_view(),

@@ -6,9 +6,11 @@
 
 {% block content %}
 
-<div class="page-header">
-  <h1>Standings <small>{{ season }}</small></h1>
-</div>
+<ol class="breadcrumb">
+  <li><a href="{{ season.get_absolute_url }}">{{ season.competition.classification }}: {{ season }}</a></li>
+  <li class="active">Standings</li>
+</ol>
+
 <table class="table table-striped">
     <tr>
     <th>#</th>

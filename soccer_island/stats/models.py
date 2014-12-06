@@ -352,7 +352,7 @@ class Competition(models.Model):
 
     def __unicode__(self):
 
-        return '{0} ({1})'.format(self.name, self.classification.__unicode__())
+        return '{0}'.format(self.name)
 
     def save(self, *args, **kwargs):
 
@@ -599,6 +599,18 @@ class Season(models.Model):
     def __unicode__(self):
 
         return '{1} {0}'.format(self.competition.__unicode__(), self.label)
+
+    def get_absolute_url(self):
+
+        return reverse('overview', kwargs={'classification':
+            self.competition.classification.slug, 'competition':
+            self.competition.slug, 'season': self.slug,})
+
+    def get_schedule_url(self):
+
+        return reverse('schedule', kwargs={'classification':
+            self.competition.classification.slug, 'competition':
+            self.competition.slug, 'season': self.slug,})
 
     def save(self, *args, **kwargs):
 

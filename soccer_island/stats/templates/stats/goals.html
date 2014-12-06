@@ -3,22 +3,25 @@
 {% block title %}Goals - {{ season }}{% endblock %}
 
 {% block content %}
-<div class="page-header">
-  <h1>Goals <small>{{ season }}</small></h1>
-</div>
+
+<ol class="breadcrumb">
+  <li><a href="{{ season.get_absolute_url }}">{{ season.competition.classification }}: {{ season }}</a></li>
+  <li class="active">Goals</li>
+</ol>
+
 <div class="row">
   <div class="col-md-6">
-    <h3>
+    <h4>
       <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
       Leading Scorers
-    </h3>
+    </h4>
     {% include 'stats/scorers.html' %}
   </div>
   <div class="col-md-6">
-    <h3>
+    <h4>
       <span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
       Assist Leaders
-    </h3>
+    </h4>
     {% include 'stats/assists.html' %}
   </div>
 </div>
