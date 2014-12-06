@@ -9,15 +9,21 @@
   <li class="active">Disciplinary</li>
 </ol>
 
-<h3>
-  <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-  Cards
-</h3>
-<table class="table">
-  <tr><th>Player</th><th>Yellow Cards</th><th>Red Cards</th><th>Team</th></tr>
-    {% for playfor in playfor_list %}
-    <tr><td>{{ playfor.player }}</td><td>{{ playfor.num_yellow_cards }}</td><td>{{ playfor.num_red_cards }}</td><td>{{ playfor.team }}</td></tr>
-    {% endfor%}
-</table>
+<h3>Disciplinary</h3>
+
+<div class="row">
+  <div class="col-md-12">
+    <h4>
+      <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+      Cards
+    </h4>
+    <table class="table">
+      <tr><th>Player</th><th>Yellow Cards</th><th>Red Cards</th><th>Team</th></tr>
+      {% for playfor in playfor_list %}
+      <tr><td>{{ playfor.player }}</td><td>{{ playfor.num_yellow_cards }}</td><td>{{ playfor.num_red_cards }}</td><td>{{ playfor.team }}</td></tr>
+      {% endfor%}
+    </table>
+  </div>
+</div>
 
 {% endblock %}

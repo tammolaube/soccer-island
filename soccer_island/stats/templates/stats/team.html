@@ -3,101 +3,107 @@
 {% block title %} {{ team }} {% endblock %}
 
 {% block content %}
-<div class="page-header">
-  <h1>{{ team.name }} <small>{{ team.classification }}</small></h1>
-</div>
-  <div class="row">
-    <div class="col-md-8">
-      <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Roster</h3>
-      <table class="table table-bordered com-soccerisland--roster">
-        <tr><th>#</th><th>Name</th></tr>
-        {% regroup current_playfors by injury_reserve as current_playfors_by_ir %}
-        {% for current_playfors in current_playfors_by_ir %}
-          {% if current_playfors.grouper %}
-        <tr><th colspan="2">Injury Reserve</th></tr>
-          {% endif %}
-          {% for playfor in current_playfors.list %}
-          <tr class="{{ playfor.player.position }}{{ playfor.player.current_suspensions|yesno:" suspended," }}{{ playfor.injury_reserve|yesno:" injury-reserve," }}">
-          <td class="col-md-1">{{ playfor.number|default_if_none:"-" }}</td>
-          <td>
-            {{ playfor.player.person }}
-            {% for suspension in playfor.player.current_suspensions %}
-            <span>
-              <a href="#"
-                tabindex="0"
-                class="btn btn-xs btn-danger suspension-popover"
-                role="button"
-                data-toggle="popover"
-                data-trigger="focus"
-                title="Suspension ({{ suspension.suspended_until|timeuntil:suspension.date_received }})"
-                data-html="True"
-                data-content="
-                <dl>
-                  <dt>Competition</dt>
-                  <dd class='text-nowrap'>{{ suspension.competition|default_if_none:"All competitions" }}</dd>
-                  <dt>Time Frame</dt>
-                  <dd class='text-nowrap'>{{ suspension.date_received }} - {{ suspension.suspended_until }}</dd>
-                  <dt>Fine</dt>
-                  <dd class='text-nowrap'>${{ suspension.fine }}
-                    ({{ suspension.fine_paid|yesno:"<strong class=\"text-success\">paid</strong>,<strong class=\"text-danger\">unpaid</strong>" }})
-                  </dd>
-                  <dt>Reason</dt>
-                  <dd>{{ suspension.reason }}</dd>
-                </dl>
-                ">
-                 <span class="glyphicon glyphicon-ban-circle"></span> {{ suspension.suspended_until|timeuntil }} left
-              </a>
-            </span>
-            {% endfor %}
-          </td>
-        </tr>
+
+<ol class="breadcrumb">
+  <li class="active">{{ team.classification }}</li>
+  <li class="active">{{ team }}</li>
+</ol>
+
+<h3>{{ team }}</h3>
+
+<div class="row">
+  <div class="col-md-8">
+    <h4><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Roster</h4>
+    <table class="table table-bordered com-soccerisland--roster">
+      <tr><th>#</th><th>Name</th></tr>
+      {% regroup current_playfors by injury_reserve as current_playfors_by_ir %}
+      {% for current_playfors in current_playfors_by_ir %}
+        {% if current_playfors.grouper %}
+      <tr><th colspan="2">Injury Reserve</th></tr>
+        {% endif %}
+        {% for playfor in current_playfors.list %}
+        <tr class="{{ playfor.player.position }}{{ playfor.player.current_suspensions|yesno:" suspended," }}{{ playfor.injury_reserve|yesno:" injury-reserve," }}">
+        <td class="col-md-1">{{ playfor.number|default_if_none:"-" }}</td>
+        <td>
+          {{ playfor.player.person }}
+          {% for suspension in playfor.player.current_suspensions %}
+          <span>
+            <a href="#"
+              tabindex="0"
+              class="btn btn-xs btn-danger suspension-popover"
+              role="button"
+              data-toggle="popover"
+              data-trigger="focus"
+              title="Suspension ({{ suspension.suspended_until|timeuntil:suspension.date_received }})"
+              data-html="True"
+              data-content="
+              <dl>
+                <dt>Competition</dt>
+                <dd class='text-nowrap'>{{ suspension.competition|default_if_none:"All competitions" }}</dd>
+                <dt>Time Frame</dt>
+                <dd class='text-nowrap'>{{ suspension.date_received }} - {{ suspension.suspended_until }}</dd>
+                <dt>Fine</dt>
+                <dd class='text-nowrap'>${{ suspension.fine }}
+                  ({{ suspension.fine_paid|yesno:"<strong class=\"text-success\">paid</strong>,<strong class=\"text-danger\">unpaid</strong>" }})
+                </dd>
+                <dt>Reason</dt>
+                <dd>{{ suspension.reason }}</dd>
+              </dl>
+              ">
+                <span class="glyphicon glyphicon-ban-circle"></span> {{ suspension.suspended_until|timeuntil }} left
+            </a>
+          </span>
           {% endfor %}
+        </td>
+      </tr>
         {% endfor %}
-      </table>
-      <h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Responsible</h3>
-      <table class="table table-striped">
-        {% for coachfor in current_coachfors %}
-        <tr>
-          <td>
-            <h4>
-              {{ coachfor.coach }} <br/>
-              <small>
-                {% if coachfor.responsibility == "a" %}
-                Assistant coach
-                {% elif coachfor.responsibility == "m" %}
-                Manager
-                {% else %}
-                Coach
-                {% endif %}
-              </small>
-            </h4>
-            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Email: {{ coachfor.coach.person.address.email|default:"-" }} <br/>
-            <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Phone: {{ coachfor.coach.person.address.phone|default:"-" }}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-      <h3><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Former Players</h3>
-      <table class="table table-bordered">
-        <tr><th>Name</th><th>From</th><th>To</th></tr>
-        {% for playfor in former_playfors %}
-        <tr>
-          <td>{{ playfor.player.person }}</td>
-          <td class="col-md-3">{{ playfor.from_date }}</td>
-          <td class="col-md-3">{{ playfor.to_date }}</td>
-        </tr>
-        {% endfor %}
-      </table>
-    </div>
-    <div class="col-md-4">
-      <h3><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Enrolled in</h3>
-      <table class="table table-condensed">
-        {% for season in seasons %}
-        <tr><td>{{ season }}</td></tr>
-        {% endfor %}
-      </table>
-    </div>
+      {% endfor %}
+    </table>
+    <h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Responsible</h4>
+    <table class="table table-striped">
+      {% for coachfor in current_coachfors %}
+      <tr>
+        <td>
+          <h5>
+            {{ coachfor.coach }} <br/>
+            <small>
+              {% if coachfor.responsibility == "a" %}
+              Assistant coach
+              {% elif coachfor.responsibility == "m" %}
+              Manager
+              {% else %}
+              Coach
+              {% endif %}
+            </small>
+          </h5>
+          <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Email: {{ coachfor.coach.person.address.email|default:"-" }} <br/>
+          <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Phone: {{ coachfor.coach.person.address.phone|default:"-" }}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <h4><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Former Players</h4>
+    <table class="table table-bordered">
+      <tr><th>Name</th><th>From</th><th>To</th></tr>
+      {% for playfor in former_playfors %}
+      <tr>
+        <td>{{ playfor.player.person }}</td>
+        <td class="col-md-3">{{ playfor.from_date }}</td>
+        <td class="col-md-3">{{ playfor.to_date }}</td>
+      </tr>
+      {% endfor %}
+    </table>
   </div>
+  <div class="col-md-4">
+    <h4><span class="glyphicon glyphicon-check" aria-hidden="true"></span> Enrolled in</h4>
+    <table class="table table-condensed">
+      {% for season in seasons %}
+      <tr><td>{{ season }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block script %}

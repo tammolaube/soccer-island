@@ -39,14 +39,24 @@
       </span> Update
     </a>
     {% endif %} <br/>
-    <small>{{ game.date }} <br/> {{ game.field }}</small>
+    <small>
+      {{ game.date }} <br/>
+      {{ game.field }} <br/>
+      Referee: {{ game.referee.person }}
+    </small>
   </div>
 </div>
 
 {% if game.played %}
+<h3>Events</h3>
 <div class="row">
   <div class="col-md-12">
     <table class="table">
+      <tr>
+        <th class="text-center">Home Goals</th>
+        <th class="text-center">Cards</th>
+        <th class="text-center">Away Goals</th>
+      </tr>
       {% for event in game.get_events %}
       <tr>
         {% if event.event_type == 1 %}
@@ -63,9 +73,8 @@
             <td class="col-md-5 text-center">
           {% endif %}
               {% if event.minute %}
-                {{ event.minute }}'
+                <strong>{{ event.minute }}'</strong>
               {% endif %}
-              <span class="glyphicon glyphicon-record"></span>
               {{ event.scored_by.player.person|default_if_none:"?" }}
               {% if event.assisted_by %}
                 ({{ event.assisted_by.player.person }})
@@ -85,14 +94,14 @@
         {% endcomment %}
           <td colspan="3" class="text-center">
             {% if event.minute %}
-              {{ event.minute }}'
+              <strong>{{ event.minute }}'</strong>
             {% endif %}
+            {{ event.play_for.player.person }}
             {% if event.color == 'Y' %}
               <span class="glyphicon glyphicon-book yellow-card"></span>
             {% else %}
               <span class="glyphicon glyphicon-book red-card"></span>
             {% endif %}
-            {{ event.play_for.player.person }}
           </td>
         {% endif %}
       </tr>

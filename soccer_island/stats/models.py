@@ -612,6 +612,24 @@ class Season(models.Model):
             self.competition.classification.slug, 'competition':
             self.competition.slug, 'season': self.slug,})
 
+    def get_standings_url(self):
+
+        return reverse('standings', kwargs={'classification':
+            self.competition.classification.slug, 'competition':
+            self.competition.slug, 'season': self.slug,})
+
+    def get_goals_url(self):
+
+        return reverse('goals', kwargs={'classification':
+            self.competition.classification.slug, 'competition':
+            self.competition.slug, 'season': self.slug,})
+
+    def get_disciplinary_url(self):
+
+        return reverse('disciplinary', kwargs={'classification':
+            self.competition.classification.slug, 'competition':
+            self.competition.slug, 'season': self.slug,})
+
     def save(self, *args, **kwargs):
 
         self.slug = slugify(self.label)
