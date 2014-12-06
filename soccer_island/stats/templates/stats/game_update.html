@@ -76,7 +76,7 @@
   </div>
   <div class="form-group">
     <input type="submit" value="Submit" class="btn btn-primary"/>
-    <a class="btn btn-default" href="{{ game.get_absolute_url }}" role="button">Cancel</a>
+    <a class="btn btn-default" onclick="window.history.back()" role="button">Cancel</a>
   </div>
 </form>
 {% endblock %}

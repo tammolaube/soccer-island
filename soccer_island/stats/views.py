@@ -93,7 +93,7 @@ def update_game_view(request, pk):
             instance=game,
             queryset=Goal.objects.filter(
                 scored_for=game.home_team,
-            ),
+            ).order_by('minute'),
             initial=[{
                 'scored_for': game.home_team,
                 'DELETE': True,
@@ -104,7 +104,7 @@ def update_game_view(request, pk):
             instance=game,
             queryset=Goal.objects.filter(
                 scored_for=game.away_team,
-            ),
+            ).order_by('minute'),
             initial=[{
                 'scored_for': game.away_team,
                 'DELETE': True,
@@ -112,6 +112,7 @@ def update_game_view(request, pk):
         )
         card_formset = CardFormSet(
             instance = game,
+            queryset = Card.objects.order_by('minute'),
             initial = [{
                 'DELETE': True,
             }]
