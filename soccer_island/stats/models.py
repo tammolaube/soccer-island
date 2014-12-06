@@ -629,7 +629,7 @@ class Matchday(models.Model):
 
 class Goal(models.Model):
 
-    minute = models.CharField(
+    minute = models.SmallIntegerField(
         blank=True,
         validators=[
             RegexValidator(
@@ -653,6 +653,16 @@ class Goal(models.Model):
     )
     scored_for = models.ForeignKey(Team, related_name='goal_scored_for')
     game = models.ForeignKey('Game', related_name='goals')
+
+    def is_away(self):
+
+        if self.scored_for == self.game.away_team:
+
+            return True
+
+        else:
+
+            return False
 
     def __unicode__(self):
 
@@ -697,6 +707,14 @@ class Game(models.Model):
         help_text='For knock-out mode only (e.g. Semifinal A).'
     )
 
+    def get_goals(self):
+
+        return Goal.objects.filter(game=self).order_by('minute')
+
+    def get_cards(self):
+
+        return Card.objects.filter(in_game=self).order_by('minute')
+
     def get_home_goals(self):
 
         return Goal.objects.filter(game=self).filter(scored_for=self.home_team)
@@ -732,6 +750,14 @@ class Game(models.Model):
 
             return None
 
+    def get_events(self):
+
+        goals = self.get_goals().extra(select = {'event_type': 1})
+        cards = self.get_cards().extra(select = {'event_type': 2})
+
+        return sorted((list(goals) + list(cards)), key= lambda event:\
+                event.minute)
+
     def __unicode__(self):
 
         return '{0} vs {1}'.format(
@@ -752,7 +778,16 @@ class Game(models.Model):
 
 class Card(models.Model):
 
-    minute = models.SmallIntegerField(blank=True, null=True)
+    minute = models.SmallIntegerField(
+        blank=True,
+        validators=[
+            RegexValidator(
+                regex='^(\d{1,3})(\+\d{1,2})?$',
+                message='Insert the minute the card was conceded. Specify stoppage times like \'45+2\' or \'90+3\'.'
+            )
+        ],
+        max_length=6
+    )
     COLOR_CHOICES = (
             ('Y', 'Yellow'),
             ('R', 'Red'),
