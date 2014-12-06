@@ -73,3 +73,25 @@ Use git to download the repository, or manually download the repository as zip a
 Use the tool pip together with the file docs/requirements.txt, to install all requirements for this project into the python environment.
 Start the development server, by executing the file soccer_island/manage.py via terminal command 'pyhton manage.py runserver'.
 The development server is now running on localhost.
+
+## Instructions
+To create a new Season you have to use the Django admin page.
+Create all elements needed for a season and mind the foreign key constrains,
+which can be derived from the database model.
+You will have to create:
+- classification (mens, womens,...)
+- competiton (division 1, tournament,...)
+- season (instance of an competition, e.g. division 1 2014-2015)
+- teams with players and coaches (use 'play fors', players and coaches need persons to exist)
+- assign the teams to the season
+- create matchdays for the season
+- create games for matchdays (you will also need to create referees and fields)
+
+The next step will be to create a navigation, that points to the season
+instance. This will be a future step, and can hopefully be achieved by
+integrating the app into a CMS system.
+
+The season can now be browsed in a webserver. There is a login, which provides
+access to forms that allow authorized users to update game data.
+
+Also see the screenshots in docs/Screenshots.
