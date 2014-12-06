@@ -75,8 +75,8 @@ Start the development server, by executing the file soccer_island/manage.py via 
 The development server is now running on localhost.
 
 ## Instructions
-To create a new Season you have to use the Django admin page.
-Create all elements needed for a season and mind the foreign key constrains,
+To create a new season, you have to use the Django admin page.
+Create all elements needed for a season, and mind the foreign key constrains,
 which can be derived from the database model.
 You will have to create:
 - classification (mens, womens,...)
@@ -94,4 +94,4 @@ integrating the app into a CMS system.
 The season can now be browsed in a webserver. There is a login, which provides
 access to forms that allow authorized users to update game data.
 
-Also see the screenshots in docs/Screenshots.
+Also, see the screenshots in docs/Screenshots.
